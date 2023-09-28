@@ -1,0 +1,152 @@
+# Exercises
+
+Time to get some practice with the concepts you've learned! Try to answer the following questions to the best of your ability. Feel free to reference the slides and notes you've taken during the lesson.
+
+No cheating! Try to only look at the answer after you gave it a try.
+
+## Add fuzzy search
+
+Try adding fuzzy search to your application so it can find the correct books, even if the user makes a typo.
+
+:::tip
+Remember the fuzzy parameter of the `text` operator? This is where you'd use it.
+:::
+
+<details>
+  <summary>Answer</summary>
+  <div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+  const aggregationPipeline = [
+      {
+          $search: {
+              index: 'fulltextsearch',
+              text: {
+                  query,
+                  path: ['title', 'authors.name', 'genres'],
+                  fuzzy: {
+                    maxEdits: 2
+                  }
+              }
+          }
+      }
+  ];
+  const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+  return books;
+}
+```
+
+  </div>
+</details>
+
+## Promote the books of the month
+
+The marketing team has decided that they want to promote the books of the month. They want to show these books first in the search results. How would you do this?
+
+:::tip
+You'll need to use the `compound` operator with multiple operators here. There is a `bookOfTheMonth` boolean field on some of the books that you could use.
+:::
+
+<details>
+  <summary>Answer</summary>
+  <div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+    const aggregationPipeline = [
+        {
+          $search: {
+            "index": "fulltextsearch",
+            "compound": {
+              "must": [
+                {
+                  "text": {
+                    query,
+                    "path": ["title", "author.name", "genres"],
+                    fuzzy: {
+                      maxEdits: 2
+                    }
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "equals": {
+                    "value": true,
+                    "path": "bookOfTheMonth",
+                    "score": {
+                      "boost": { value: 10 }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ];
+    const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+    return books;
+}
+```
+
+  </div>
+</details>
+
+## Promote shorter books
+
+You've noticed that readers tend to prefer shorter books. Without using a large score boost, try to promote shorter books in the search results.
+
+:::tip
+Even without a score adjuster, the "should" operator will still boost the score of the documents that match it.
+:::
+
+<details>
+  <summary>Answer</summary>
+  <div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+    const aggregationPipeline = [
+        {
+          $search: {
+            "index": "fulltextsearch",
+            "compound": {
+              "must": [
+                {
+                  "text": {
+                    query,
+                    "path": ["title", "author.name", "genres"],
+                    fuzzy: {
+                      maxEdits: 2
+                    }
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "equals": {
+                    "value": true,
+                    "path": "bookOfTheMonth",
+                    "score": {
+                      "boost": { value: 10 }
+                    }
+                  }
+                },
+                {
+                  "range": {
+                    path: "pages",
+                    lt: 80
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ];
+    const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+    return books;
+}
+```
+</div>
+</details>

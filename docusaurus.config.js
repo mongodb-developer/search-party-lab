@@ -4,36 +4,37 @@
 // Change here to customise config
 
 // Name of the Github Repo
-const workshopName = 'vector-search-lab';
+const workshopName = 'search-party-lab';
 // Change this if hosting outside mongodb-developer
-const organizationName = "joellord";
+const organizationName = "mongodb-developer";
 
 // Main page config
-const title = "Join the Search Party!";
-const tagLine = "Exploring MongoDB’s Advanced Search Features";
-const startButtonTitle = "Enter Lab";
+const title = "Creating Compelling Search Experiences";
+const tagLine = "A Lab by MongoDB to help you build a search experience with MongoDB Atlas Search";
+const startButtonTitle = "Enter The Search Party";
+const favicon = "img/favicon.svg"
 
 // Main Page Features
 const featureList = [
   {
-    title: 'Queries',
-    illustration: 'img/docu.svg',
+    title: 'Hands-On Experiences',
+    illustration: 'img/coding.png',
     description: `
-        Query like a pro
+        Learn by doing, not by reading.
     `,
   },
   {
-    title: 'Atlas Search',
-    illustration: 'img/typing.gif',
+    title: 'Amazing Instructors',
+    illustration: 'img/highfive.png',
     description: `
-        Add full-text search to your app
+        Build it with the help of our amazing instructors, or just do it on your own.
     `,
   },
   {
-    title: 'Vector Search',
-    illustration: 'img/expanded-leafy.png',
+    title: 'Take-Home Material',
+    illustration: 'img/writing.png',
     description: `
-        Semantic search with vectors
+        Take home the material and keep learning.
     `,
   },
 ];
@@ -41,7 +42,7 @@ const featureList = [
 // UTM stuff
 
 const utmAdvocateName = `joel.lord`;
-const utmWorkshopName = 'vector_search_lab'
+const utmWorkshopName = 'search-party-lab'
 
 const utmParams = `utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=${utmWorkshopName}&utm_term=${utmAdvocateName}`;
 
@@ -86,13 +87,14 @@ const config = {
   projectName: `${organizationName}.github.io`,
   organizationName: `${organizationName}`,
   trailingSlash: false,
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
-  deploymentBranch: 'gh-pages',
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
+  favicon: `${favicon}`,
+  deploymentBranch: "gh-pages",
+  staticDirectories: ["static"],
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
   customFields: {
     startButtonTitle: `${startButtonTitle}`,
@@ -101,18 +103,18 @@ const config = {
   },
   presets: [
     [
-      'classic',
+      "classic",
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          sidebarPath: require.resolve('./sidebars.js'),
+          sidebarPath: require.resolve("./sidebars.js"),
           editUrl: `https://github.com/${organizationName}/${workshopName}/blob/main`,
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve("./src/css/custom.css"),
         },
         gtag: {
-          trackingID: 'G-ZJ28V71VTQ',
+          trackingID: "G-ZJ28V71VTQ",
           anonymizeIP: true,
         },
       }),
@@ -126,33 +128,35 @@ const config = {
         sidebar: {
           autoCollapseCategories: true,
           hideable: true,
-        }
+        },
       },
+      announcementBar: undefined,
       navbar: {
+        title: `${title}`,
         logo: {
-          alt: 'MongoDB Logo',
-          src: 'img/logo.svg',
-          srcDark: 'img/logo-dark.svg',
-          className: 'navbar-logo',
-          width: '135px',
-          height: '100%'
+          alt: "MongoDB Logo",
+          src: "img/logo.svg",
+          srcDark: "img/logo-dark.svg",
+          className: "navbar-logo",
+          width: "135px",
+          height: "100%",
         },
         items: [
           {
             href: `https://github.com/${organizationName}/${workshopName}`,
-            label: 'GitHub',
-            position: 'right',
+            label: "GitHub",
+            position: "right",
           },
         ],
       },
       footer: {
-        style: 'dark',
+        style: "dark",
         links: footerLinks,
       },
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['powershell', 'swift', 'kotlin'],
+        additionalLanguages: ["powershell", "swift", "kotlin"],
       },
     }),
 };

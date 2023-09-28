@@ -1,0 +1,58 @@
+# Construct Search queries
+
+You can construct Atlas Search queries with the `$search` aggregation pipeline stage.
+
+<Link href="https://mongodb.com/docs/manual/core/aggregation-pipeline">MongoDB aggregation pipelines</Link> are multi-stage ‘assembly lines’ that reshape data and perform calculations. Pipelines can consist of one or more aggregation stages, performing different operations like match, group, sort, and output. For an exhaustive list of all available stages visit <Link href="https://mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#std-label-aggregation-pipeline-operator-reference">the complete list of pipeline operators</Link>.
+
+:::caution
+If you are not familiar with the aggregation pipelines, you should start with the [Advanced Querying With Aggregation Pipelines](https://mongodb-developer.github.io/aggregation-workshop/)
+:::
+
+In this section, we'll build an aggregation pipeline with the `$search` stage which performs full-text search using the Atlas Search index you just created.
+
+## Aggregations in the Atlas UI
+
+Navigate to the **Collections** tab of your database deployment, pick the `books` collection, andn avigate to the **Aggregation** tab from the navbar under your collection details.
+
+<Screenshot alt="Aggregations tab highlighted on the collection details page" src="img/screenshots/3-aggregations/1-search-stage/1-aggregation-tab.png" url="https://cloud.mongodb.com" />
+
+:::tip
+The Atlas UI can start feeling a bit cramp at this point. You can also use the aggregation pipeline builder in <Link href="https://www.mongodb.com/products/tools/compass">Compass</Link> for a better experience.
+:::
+
+Click the **Add Stage** button and type **$search** in the **select** input.
+
+<Screenshot alt="Stage 1 of the pipeline with the $search stage selected" src="img/screenshots/3-aggregations/1-search-stage/2-search-stage.png" url="https://cloud.mongodb.com" />
+
+Add the following code for the `$search` stage.
+
+```js
+{
+    index: "fulltextsearch",
+    text: {
+        query: "cooking",
+        path: ["title"]
+    }
+}
+```
+
+The stage uses the "fulltextsearch" index. You don't need to explicitly define the index if it's "default" but you can keep it for clarity.
+
+The `text` operator will search for "cooking" in the `title` field. You should see a collection of documents returned on the right.
+
+Click the **Add Stage** button, scroll down, and select **$project** for Stage 2.
+
+<Screenshot alt="Stage 2 of the pipeline with the $project stage selected" src="img/screenshots/3-aggregations/1-search-stage/3-project-stage.png" url="https://cloud.mongodb.com" />
+
+Add the following implementation for the `$project` stage to filter the returned fields.
+
+```js
+{
+  title: 1,
+  authors: 1,
+  genres: 1,
+  pages: 1
+}
+```
+
+At this point, you should see similar results as what you did in the last section, as this is pretty much the same query.

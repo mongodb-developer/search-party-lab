@@ -1,0 +1,44 @@
+# Score modifiers
+
+In the operators you've seen so far, you can adjust the `score` property to modify the score of a result. This is useful for boosting or demoting results based on certain criteria.
+
+There are multiple ways to modify the score. You can look at the <Link to="https://www.mongodb.com/docs/atlas/atlas-search/score/modify-score/">documentation</Link> to learn more.
+
+Here, we will focus on simple ways to do so.
+
+## Boost
+
+Using `boost`, you can multiply the score by a certain value. This can be useful to promote certain results that would be sponsored for example. The higher sponsor tiers would get higher modifiers.
+
+In our dataset, we could decide to boost results that are of the `fiction` genre.
+
+```
+{
+  $search: {
+    index: 'fulltextsearch',
+    text: {
+      query: 'fiction',
+      path: 'genres'
+    },
+    score: { boost: { value: 2 } }
+  }
+}
+```
+
+## Constant
+
+We can also set the score to a constant value. This can be useful to demote results that are not relevant enough. In our use case, we could set a constant value of 0 for books that are not currently available.
+
+```
+{
+  $search: {
+    index: 'fulltextsearch',
+    equals: {
+      path: 'available',
+      value: 0
+    },
+    score: { constant: { value: 0 } }
+  }
+}
+```
+

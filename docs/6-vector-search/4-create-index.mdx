@@ -1,0 +1,45 @@
+# Create Vector Search indexes
+
+To start using Vector Search, you must configure another search index on your database. The process is similar to what you have done in the last section.
+
+## Step-by-step guide to creating your Vector Search index
+
+Open the **Database Deployments** page in MongoDB Atlas and select **Create Index** in the lower right corner.
+
+<Screenshot src="img/screenshots/6-vector-search/4-create-index/1-create-index.png" alt="The 'Database Deployments' page with the 'Create Index' link highlighted" url="https://cloud.mongodb.com" />
+
+
+Click the **Create Search Index** button.
+
+<Screenshot src="img/screenshots/6-vector-search/4-create-index/2-create-search-index.png" alt="The 'Create Index' page with the 'Create Search Index' button highlighted" url="https://cloud.mongodb.com" />
+
+This time, you will use the **JSON Editor** to create your index
+
+<Screenshot src="img/screenshots/6-vector-search/4-create-index/3-json-editor.png" alt="The 'Create Index' page with the 'JSON Editor' tab highlighted" url="https://cloud.mongodb.com" />
+
+
+Select your database and collection, change the index name to `vectorsearch`, and add the following code in the JSON editor:
+
+```js
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "vectorizedSynopsis": {
+        "dimensions": 1536,
+        "similarity": "cosine",
+        "type": "knnVector"
+      }
+    }
+  }
+}
+```
+
+Your configuration should look like this.
+
+<Screenshot src="img/screenshots/6-vector-search/4-create-index/4-json-editor-config.png" alt="The 'JSON Editor' tab with the configuration highlighted" url="https://cloud.mongodb.com" />
+
+
+
+The final step allows you to review the index configuration and refine it if needed. Go ahead and click **Create Search Index**.
+

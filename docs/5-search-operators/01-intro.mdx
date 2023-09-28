@@ -1,0 +1,21 @@
+# Intro to Search operators
+
+In the previous exercise, you used a `$search` stage that looked like this one.
+
+```js
+{
+    $search: {
+        index: 'fulltextsearch',
+        text: {
+            query,
+            path: ['title', 'authors.name', 'categories']
+        }
+    }
+}
+```
+
+We've talked about the `$search` stage, and what is the `index` property, but so far, we've only used the `text` operator in it's most simple form.
+
+However, as you want to refine the results of your search, you'll need to use more advanced operators, and even combine some of those operators to get the results you want.
+
+In this exercise, we'll explore some of the most common operators, and how to use them.

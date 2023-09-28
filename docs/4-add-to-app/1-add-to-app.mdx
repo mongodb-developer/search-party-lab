@@ -1,0 +1,57 @@
+# Add full-text search to your application
+
+So far, you've seen how to use the search indexes in the aggregation pipeline builder, or in Compass. But what if you want to use the search index in your application?
+
+To do so, you will need to add some code to your application.
+
+## Using aggregation pipelines in Node.js
+
+To use the aggregation pipeline in Node.js, you will need to use the `aggregate` method on the collection object. This method takes an array of stages as an argument, and returns a cursor. You can then use the cursor to iterate over the results, or use the `toArray` method to get the results in an array.
+
+```js
+const documents = await collection.aggregate(aggregationPipelines).toArray();
+```
+
+You now know everything you need to add full-text search capabilities to your application.
+
+## Adding search to the library app
+
+Open up the code from the server file `server/controllers/books.ts`. In there, look for the `searchBooks` function.
+
+Right now, it uses a regular expression to query the database.
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+  const books = await collections?.books?.find({ title: {$regex: new RegExp(query, "i")} }).toArray();
+  return books;
+}
+```
+While this code works to a certain extent, it is less than optimal. As the dataset grows, the performance of this query will degrade because it will have to scan the entire collection. You cannot query the index with a regular expression. Furthermore, the query only matches on the title, and only for the exact sequence of characters.
+
+Change this code to use the search index instead. You will need to use the `$search` stage in the aggregation pipeline. Have your search cover the title, the author name, and the genres array.
+
+<details>
+<summary>Click here to see the answer</summary>
+<div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+  const aggregationPipeline = [
+      {
+          $search: {
+              index: 'fulltextsearch',
+              text: {
+                  query,
+                  path: ['title', 'authors.name', 'genres']
+              }
+          }
+      }
+  ];
+  const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+  return books;
+}
+```
+</div>
+</details>
+
+Play around the application, and look at what are the results you're getting. You should see that the results are more relevant than before.

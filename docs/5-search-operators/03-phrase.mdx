@@ -1,0 +1,25 @@
+# The `phrase` operator
+
+The `phrase` operator is used to search for a group of words in a specific order. It is similar to the `match` operator, except that it will match anywhere in the text, not just at the beginning.
+
+The definition of the `phrase` operator is. You can find more details on the phrase operator in the <Link to="https://www.mongodb.com/docs/atlas/atlas-search/phrase/">official documentation</Link>
+
+```js
+{
+  $search: {
+     "index": <index name>, // optional, defaults to "default"
+     "phrase": {
+       "query": "<search-string>",
+       "path": "<field-to-search>",
+       "score": <options>,
+       "slop": <distance-number>
+     }
+  }
+}
+```
+The usage itself is very similar to how you would use the `text` operator.
+
+## The `slop` property
+
+The `slop` property is used to specify how far apart the words in the phrase can be. The default value is `0`, which means that the words must be in the exact order specified in the query. If you set the value to `1`, then the words can be one word apart, and so on.
+

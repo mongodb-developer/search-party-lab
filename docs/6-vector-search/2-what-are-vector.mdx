@@ -1,0 +1,35 @@
+# What Are Vectors?
+
+Simply put, a vector is a list of numbers. For example, a vector of length 3 could be [1, 2, 3]. A vector of length 5 could be [1, 2, 3, 4, 5]. A vector of length 100 could be [1, 2, 3, 4, 5, ..., 100]. The length of a vector is the number of elements it contains.
+
+In AI, vectors are a mathematical representation of data.
+
+Thanks to some of the latest advances in AI, we can now use vectors to represent words, sentences, paragraphs, and even entire documents. This is a huge breakthrough because it allows us to use AI to understand the meaning of text.
+
+Vectors can even be used to represent images, audio, and video, but we'll focus on text in this workshop.
+
+## Why Do We Need Vectors?
+
+Computers can't understand text. They can only understand numbers. So, we need a way to convert text into numbers. That's where vectors come in.
+
+Using vectors, we can plot text in a multi-dimensional space. It is hard to visualize a multi-dimensional space, so let's start with a 2-dimensional space.
+
+Imagine a plot with a x and y axis. Our ML model will plot the words "cat", "dog", "cute" and "social".
+
+![Points on a chart](/img/6-vector-search/1-points.png)
+
+The ML model will plot the words based on their meaning. Words with similar meanings will be plotted close together. Words with different meanings will be plotted far apart.
+
+When doing a search, we will create a new vector for the search term. Then, we will find the closest words to the search term. The closest words will be the words that are plotted closest to the search term.
+
+As an example, if we search for pets, we might get "dogs" and "cats".
+
+![Search for pets](/img/6-vector-search/2-pets.png)
+
+However, if we search for pet characteristics, we might get "cute" and "cat".
+
+![Search for pet characteristics](/img/6-vector-search/3-characteristics.png)
+
+## How Do We Create Vectors?
+
+There are many ways to create vectors. In this workshop, we'll use a pre-trained model and an API that will return vectors for us.

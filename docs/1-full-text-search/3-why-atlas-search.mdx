@@ -1,0 +1,15 @@
+# Why Atlas Search
+
+Atlas Search is the built-in search solution for MongoDB Atlas. It is a fully managed service that is easy to set up, operate, and scale. Atlas Search is based on Apache Lucene and supports the Apache Lucene Query Parser Syntax. It supports text search, geospatial search, and faceted search.
+
+![Atlas Search](/img/1-full-text-search/2-atlas-search.png)
+
+Using Atlas Search, there is no need to sync the data between MongoDB and a third-party tool. Atlas Search is a fully managed service that is easy to set up, operate, and scale. It is built on top of the MongoDB query engine, so it is always up to date with the latest MongoDB features and allows you to use the MongoDB query language to search your data.
+
+Furthermore, Atlas Search is fully integrated with MongoDB Atlas, so you can easily create and manage your search indexes from the Atlas UI.
+
+## How to use Atlas Search
+
+To use Atlas Search, you need to create a search index. A search index is a data structure that contains the data you want to search and the rules for how to search it. You can create a search index using the Atlas UI or the Atlas API.
+
+Once you have an index in place, you can use the MongoDB Query API to query your data. This will be done with the new `$search` operator in your aggregation pipelines.

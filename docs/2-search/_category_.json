@@ -1,0 +1,8 @@
+{
+  "label": "Start Searching",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "In this section, you will learn how to create a search index, and how to search your first book."
+  }
+}

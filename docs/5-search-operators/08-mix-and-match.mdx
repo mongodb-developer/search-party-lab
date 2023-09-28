@@ -1,0 +1,99 @@
+# Mixing and matching
+
+The whole value of using these operators comes from combining them to create search results that are more relevant to your users.
+
+Using the `compound` operator, you can mix and match some of the operators you've just seen. The syntax for the `compound` operator is:
+
+```js
+{
+  $search: {
+    "index": <index name>, // optional, defaults to "default"
+    "compound": {
+      <must | mustNot | should | filter>: [ { <clauses> } ],
+      "score": <options>
+    }
+  }
+}
+```
+
+`must`
+Clauses that must match to for a document to be included in the results. The returned score is the sum of the scores of all the subqueries in the clause.
+
+Maps to the AND boolean operator.
+
+`mustNot`
+Clauses that must not match for a document to be included in the results. mustNot clauses don't contribute to a returned document's score.
+
+Maps to the AND NOT boolean operator.
+
+`should`
+Clauses that you prefer to match in documents that are included in the results. Documents that contain a match for a should clause have higher scores than documents that don't contain a should clause. The returned score is the sum of the scores of all the subqueries in the clause.
+
+Say you wanted to search for a book that contains "cats" in the title, but you prefer having shorter books, you can use the following query:
+
+```js
+{
+  $search: {
+    "index": "fulltextsearch",
+    "compound": {
+      "must": [
+        {
+          "text": {
+            "query": "cats",
+            "path": "title"
+          }
+        }
+      ],
+      "should": [
+        {
+          "range": {
+            "path": "pages",
+            "gt": 0,
+            "lt": 100
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+This will return all books that contain "cats" in the title, but will prefer shorter books. It will still return longer books, but they will be scored lower than shorter books.
+
+## Compound with scoring
+
+You can also use the `compound` operator with the `score` option to control how the scores of the subqueries are combined. Say the library has a monthly theme, and they want to promote the books that have a specific word in the synopsis. This month, the theme is "bears". Try to write a search query that will return the books a user queried for, but those who contain the word "bear" in it will have a higher score and come at the top. Try to have a book about Winnie the Pooh come first when a user searches for "honey".
+
+<details>
+  <summary>Click here to see the answer</summary>
+  <div>
+
+```js
+{
+    "index": "fulltextsearch",
+    "compound": {
+      "must": [
+        {
+          "text": {
+            "query": "honey",
+            "path": ["title", "author.name", "synopsis"]
+          }
+        }
+      ],
+      "should": [
+        {
+          "text": {
+            "query": "bear",
+            "path": "synopsis",
+            "score": {
+              "boost": { value: 10 }
+						}
+          }
+        }
+      ]
+    }
+  }
+```
+
+  </div>
+</details>

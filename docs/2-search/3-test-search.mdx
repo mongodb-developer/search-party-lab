@@ -1,0 +1,67 @@
+# Testing the Search index
+
+Now that you have a search index, you can test it out.
+
+From the list of indexes, look for the **Query** button.
+
+<Screenshot src="img/screenshots/2-search/3-test-search/1-query-button.png" alt="The Query button from the list of indexes" url="https://cloud.mongodb.com" />
+
+## Search Tester
+
+By using the **Query** button above, you will open the **Search Tester**. In the field, enter the word:
+
+```
+cooking
+```
+
+and look at the results you get.
+
+<Screenshot src="img/screenshots/2-search/3-test-search/2-search-tester.png" alt="The Search Tester" url="https://cloud.mongodb.com" />
+
+You can see that you get a list of books back including:
+* High-Flavor, Low-Fat Vegetarian _Cooking_
+* _Cooking_ Secrets of the CIA: Favorite Recipes from the Culinary Institu…
+* Semi-Homemade _Cooking_: Quick, Marvelous Meals and Nothing is Made from…
+
+All those results match the word _cooking_. Notice how capitalization doesn't matter. Neither does the placement of the word in the title. The search index is smart enough to find the word _cooking_ in all those titles.
+
+Already, you are providing a better experience to your developers.
+
+## Searching only the title
+
+This is great. However, this search query is searching the entire document. There might be some cases where that works for you, but in most cases, you'll likely want to limit this search only to the fields that matter. In this case, let's change it to only search the title.
+
+In the **Search Tester**, click on the **Edit $search query** button, next to the green **Search** button.
+
+This will open up the query editor.
+
+<Screenshot src="img/screenshots/2-search/3-test-search/3-query-editor.png" alt="The Edit $search query button" url="https://cloud.mongodb.com" />
+
+Notice you the `path` property currently shows `*`. This means that it will search the entire document. Try to change the search to only search the `title` field.
+
+:::tip
+You can find more information about how to construct a query path in the [Search documentation](https://www.mongodb.com/docs/atlas/atlas-search/path-construction/).
+:::
+
+<details>
+  <summary>Click here to see the answer</summary>
+  <div>
+
+```js
+[
+  {
+    $search: {
+      index: "fulltextsearch",
+      text: {
+        query: "cooking",
+        path: ["title"]
+      }
+    }
+  }
+]
+```
+
+</div>
+</details>
+
+You will see the same results, but ordered differently. This has to do with relevancy, but we'll cover that in a later section.
