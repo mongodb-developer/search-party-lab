@@ -1,0 +1,8 @@
+{
+  "label": "Getting Ready",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "In this section, you will get up and running, creating your Atlas account and spinning up your first database."
+  }
+}

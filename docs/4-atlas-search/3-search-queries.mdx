@@ -1,0 +1,81 @@
+---
+sidebar_position: 3
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+import Link from "@site/src/components/LinkWithUTM";
+
+# Construct search queries
+
+You can construct Atlas Search queries with the `$search` aggregation pipeline stage.
+
+<Link href="https://mongodb.com/docs/manual/core/aggregation-pipeline">MongoDB aggregation pipelines</Link> are multi-stage ‘assembly lines’ that reshape data and perform calculations. Pipelines can consist of one or more aggregation stages, performing different operations like match, group, sort, and output. For an exhaustive list of all available stages visit [Aggregation Pipeline Stages](https://mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#std-label-aggregation-pipeline-operator-reference?utm_campaign=devrel&utm_source=workshop&utm_medium=cta&utm_content=soccer_workshop&utm_term=stanimira.vlaeva).
+
+In this section, we'll build an aggregation pipeline with the `$search` stage which performs full-text search using an Atlas Search index.
+
+In this section, you'll use the `text` operator which performs a textual analysis search.
+
+## Aggregations in the Atlas UI
+
+1. Navigate to the **Collections** tab of your database deployment.
+
+    <img
+        alt="Collections tab highlighted on database deployments page"
+        src={useBaseUrl('/img/chapter-2-search-indexes/collections-tab.png')}
+    />
+
+1. Navigate to the **Aggregation** tab from the navbar under your collection details.
+
+    <img
+        alt="Aggregations tab highlighted on the collection details page"
+        src={useBaseUrl('/img/chapter-2-search-indexes/aggregation-tab.png')}
+    />
+
+1. Click the **Add Stage** button and type **$search** in the **select** input.
+
+    <img
+        alt="Stage 1 of the pipeline with the $search stage selected"
+        src={useBaseUrl('/img/chapter-2-search-indexes/search-stage.png')}
+    />
+
+1. Add the following code for the `$search` stage.
+
+    ```js
+    {
+        index: "fulltextsearch",
+        text: {
+            query: "harry potter",
+            path: "title"
+        }
+    }
+    ```
+
+    The stage uses the "fulltextsearch" index. You don't need to explicitly define the index if it's "default" but you can keep it for clarity.
+
+    The `text` operator will search for "harry potter" in the `title` field. You should see a collection of documents returned on the right.
+
+1. Click the **Add Stage** button, scroll down, and select **$project** for **Stage 2**.
+
+    <img
+        alt="Stage 1 of the pipeline with the $project stage selected"
+        src={useBaseUrl('/img/chapter-2-search-indexes/project-stage.png')}
+    />
+
+1. Add the following implementation for the `$project` stage to filter the returned fields.
+
+    ```js
+    {
+        title: 1,
+        year: 1,
+        "imdb.rating": 1,
+        fullplot: 1,
+        poster: 1,
+        released: 1,
+        genres: 1
+    }
+    ```
+
+    :::info
+    This is not an exact match search but a textual analyzed search. The full text in the `title` field is “Harry Potter and the Half-Blood Prince”. If instead of an aggregation pipeline and `$search`, you use `collection.find({ title: "harry potter" })`, you won't get this document in the results.
+    :::
+

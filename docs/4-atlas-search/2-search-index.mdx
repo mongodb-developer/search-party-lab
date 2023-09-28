@@ -1,0 +1,76 @@
+---
+sidebar_position: 2
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Create Atlas Search indexes
+
+MongoDB's Atlas Search is a full-text search solution built on top of [Apache Lucene](https://lucene.apache.org/). Atlas Search allows fine-grained text indexing and querying of data persisted in your Atlas database.
+
+To start using Atlas Search, you must configure a search index on your database. Atlas Search indexes categorize data in an easily searchable format and enable faster document retrieval using certain identifiers. You can create a search index right from the Atlas UI.
+
+## Step-by-step guide to creating your first Atlas Search index
+
+1. Open the **Database Deployments** page in MongoDB Atlas and select **Create Index** in the lower right corner.
+
+    <img
+        alt="The 'Database Deployments' page with the 'Create Index' link highlighted"
+        src={useBaseUrl('/img/chapter-2-search-indexes/database-deployments-create-index.png')}
+    />
+
+1. Click the **Create Search Index** button.
+
+    <img
+        alt="The 'Search' section of the cluster details page with the 'Create Search Index' button highlighted"
+        src={useBaseUrl('/img/chapter-2-search-indexes/create-search-index.png')}
+    />
+
+1. The first step of building the search index is selecting the configuration method. You can choose from two options — using the **Visual Editor** or writing the configuration yourself with the **JSON Editor**. Let's stick to the default **Visual Editor**. To proceed, click **Next**.
+
+    <img
+        alt="The 'Configuration Method' step of creating a new search index"
+        src={useBaseUrl('/img/chapter-2-search-indexes/search-index-config-method.png')}
+    />
+
+
+1. Next, you need to select a name and data source for your index. Change the name to **fulltextsearch** and select the database **sample_mflix** and the collection **embedded_movies**.
+
+    <img
+        alt="The 'Name & Data Source' step of creating a new search index"
+        src={useBaseUrl('/img/chapter-2-search-indexes/search-index-config-name-datasource.png')}
+    />
+
+1. The final step allows you to review the index configuration and refine it if needed. You may also see the JSON that was generated from your configuration by clicking **View JSON**.
+
+    ```JSON
+    {
+        "mappings": {
+            "dynamic": true
+        }
+    }
+    ```
+
+    :::info
+    The index is using dynamic field mappings. We didn't configure any explicit (static) mappings between the fields in the documents and the search index. That's why Atlas created dynamic mappings that match the data in the documents to some common field types such as `double`, `string`, `array`, `int`, and `double`.
+    Dynamic mappings are useful when you're just getting started with Atlas Search or if your schema changes regularly. However, they take up more space compared to static mappings.
+    :::
+
+1. You don't need to refine this index. Go ahead and click **Create Search Index**.
+
+    <img
+        alt="The 'Review & Refine' step of creating a new search index"
+        src={useBaseUrl('/img/chapter-2-search-indexes/search-index-config-refine.png')}
+    />
+
+1. You'll be redirected to a page showing all of the search indexes used in your Atlas project. Creating the index should take up to a minute.
+
+    :::info
+    When your search index reaches status **Active**, you'll be able to see more information about the index. For example, the number of indexed documents, the field mappings and the index size. Notice also that you're using 1 out of the 3 free search indexes that come with your free M0 database.
+    :::
+
+    <img
+        alt="List with search indexes"
+        src={useBaseUrl('/img/chapter-2-search-indexes/search-indexes-list.png')}
+    />
+

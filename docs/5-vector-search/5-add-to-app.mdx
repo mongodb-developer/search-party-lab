@@ -1,0 +1,50 @@
+---
+sidebar_position: 5
+---
+
+# Add semantic search to your application
+
+You now know everything you need to add full-text search capabilities to your application.
+
+Open up the code from the server file `server/controllers/movies.mjs` once more, and edit the `vectorSearch` method to query your data for semantic search.
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+  async vectorSearch(searchTerms) {
+    const embeddedSearchTerms = await getTermEmbeddings(searchTerms);
+    if (embeddedSearchTerms === null) throw new Error("No embedding found");
+
+    const movies = await collection
+      .aggregate([
+        {
+          $search: {
+            index: "default",
+            knnBeta: {
+              vector: embeddedSearchTerms,
+              path: "plot_embedding",
+              k: 20,
+            },
+          },
+        },
+        {
+          $project: {
+            title: 1,
+            year: 1,
+            "imdb.rating": 1,
+            fullplot: 1,
+            poster: 1,
+            released: 1,
+            genres: 1,
+            score: { $meta: "searchScore" },
+          },
+        },
+      ])
+      .toArray();
+    return movies;
+  }
+```
+</div>
+</details>

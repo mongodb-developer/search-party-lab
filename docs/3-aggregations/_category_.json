@@ -1,0 +1,8 @@
+{
+  "label": "Aggregation pipelines",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "In this section, you will  learn how to query your data using MongoDB's query language."
+  }
+}

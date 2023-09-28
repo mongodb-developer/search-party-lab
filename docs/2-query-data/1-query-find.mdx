@@ -1,0 +1,81 @@
+---
+sidebar_position: 1
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Querying data
+
+The first thing you'll want to do with your data is query it. To do so, you will need to start by connecting to your database.
+
+## Connecting to your database
+
+Your server is already set up and connected to your database. It used the connection string from your `.env` file to connect to it.
+
+If you want to look at what the server is doing, you can look at the `server/db/conn.mjs` file.
+
+```js
+const uri = process.env.ATLAS_URI;
+// Create a MongoClient that will manage the connection to the database.
+const client = new MongoClient(uri);
+await client.connect();
+
+await client.db("admin").command({ ping: 1 });
+console.log("Pinged your deployment. You successfully connected to MongoDB!");
+const collection = client.db("sample_mflix").collection("embedded_movies");
+```
+
+This code takes your connection string and creates a `MongoClient` object. This object is used to connect to your database.
+
+It also pings the database to make sure you are connected. If you are connected, you will see the message `Pinged your deployment. You successfully connected to MongoDB!` in your console.
+
+Finally, it declares a collection called `collection` that you will use to query your data.
+
+## Querying your data
+
+The first thing we'll do is query the data using a `find` method. This method will return all the documents in your collection matching the query.
+
+In your CodeSanbox, open the file `server/controllers/movies.mjs`, and look for the method `find`.
+
+This function will return the data from the database. It is currently returning an empty array.
+
+The search term is passed as a parameter to the function. You can access it using `searchTerm`.
+
+Now go to the [MongoDB documentation](https://www.mongodb.com/docs/manual/reference/method/db.collection.find/) and find out how to query your data using the `find` method.
+
+You should limit the search results to 20 and only return the required fields.
+
+Once you have the code, add it to your CodeSanbox.
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+  async find(searchTerm) {
+    const movies = await collection
+      .find({ title: searchTerm }, {
+        title: 1,
+        year: 1,
+        "imdb.rating": 1,
+        fullplot: 1,
+        poster: 1,
+        released: 1,
+        genres: 1
+      })
+      .limit(20)
+      .toArray();
+
+    return movies;
+  }
+```
+</div>
+</details>
+
+## Test it out -- and see the limitations
+
+You can now enter data in the search box and search for movies. Try searching for `The Terminator` or `Coraline`. Those should return a movie.
+
+Now try a more broad search like `Terminator`. You should see an empty array.
+
+This is because the `find` method is looking for an exact match. If you want to search for a partial match, you will need to use a different method.

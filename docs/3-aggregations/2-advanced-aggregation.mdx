@@ -1,0 +1,178 @@
+---
+sidebar_position: 2
+---
+# 🦸 Advanced Aggregation Pipelines
+
+You can also use aggregation pipelines to perform more advanced operations on your data.
+
+## Exercises
+
+Try finding the answer to the following questions using aggregation pipelines.
+
+### Return a collection with the cast members of the movie with the most comments.
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+[
+  {
+    $sort:
+      /**
+       * Provide any number of field/order pairs.
+       */
+      {
+        num_mflix_comments: -1,
+      },
+  },
+  {
+    $limit:
+      /**
+       * Provide the number of documents to limit.
+       */
+      1,
+  },
+  {
+    $unwind:
+      /**
+       * path: Path to the array field.
+       * includeArrayIndex: Optional name for index.
+       * preserveNullAndEmptyArrays: Optional
+       *   toggle to unwind null and empty values.
+       */
+      {
+        path: "$cast",
+      },
+  },
+  {
+    $project:
+      /**
+       * Specifications: The fields to
+       *   include or exclude.
+       */
+      {
+        cast: 1,
+      },
+  },
+]
+```
+</div>
+</details>
+
+### What are the three countries that produced the most Dramas?
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+[
+  {
+    $match:
+      /**
+       * query: The query in MQL.
+       */
+      {
+        genres: "Drama",
+      },
+  },
+  {
+    $unwind:
+      /**
+       * path: Path to the array field.
+       * includeArrayIndex: Optional name for index.
+       * preserveNullAndEmptyArrays: Optional
+       *   toggle to unwind null and empty values.
+       */
+      {
+        path: "$countries",
+      },
+  },
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: "$countries",
+        count: {
+          $sum: 1,
+        },
+      },
+  },
+  {
+    $sort:
+      /**
+       * Provide any number of field/order pairs.
+       */
+      {
+        count: -1,
+      },
+  },
+  {
+    $limit:
+      /**
+       * Provide the number of documents to limit.
+       */
+      3,
+  },
+]
+```
+</div>
+</details>
+
+### Which actor appears in the highest number of movies?
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+[
+  {
+    $unwind:
+      /**
+       * path: Path to the array field.
+       * includeArrayIndex: Optional name for index.
+       * preserveNullAndEmptyArrays: Optional
+       *   toggle to unwind null and empty values.
+       */
+      {
+        path: "$cast",
+      },
+  },
+  {
+    $group:
+      /**
+       * _id: The id of the group.
+       * fieldN: The first field name.
+       */
+      {
+        _id: "$cast",
+        count: {
+          $sum: 1,
+        },
+      },
+  },
+  {
+    $sort:
+      /**
+       * Provide any number of field/order pairs.
+       */
+      {
+        count: -1,
+      },
+  },
+  {
+    $limit:
+      /**
+       * Provide the number of documents to limit.
+       */
+      1,
+  },
+]
+```
+</div>
+</details>

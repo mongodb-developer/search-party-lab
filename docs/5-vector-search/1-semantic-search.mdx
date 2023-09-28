@@ -1,0 +1,31 @@
+---
+sidebar_position: 1
+---
+
+# Semantic Search
+
+We can't have a technical event without talking about AI, ML, and LLMs these days. So, let's talk about semantic search.
+
+## What is semantic search?
+
+Semantic search is a search technique that uses the meaning of words to find relevant results. It's what powers large language models that we see nowadays.
+
+Using semantic search, we can find relevant results even if the search terms don't appear in the results. For example, if we search for "How to make a cake", we can find results that contain the words "How to bake a cake" or "How to make a pie".
+
+This is done with vectors. Vectors are mathematical representations of words. They are used to find the similarity between words. For example, the word "cake" is similar to the word "pie" because they are both desserts.
+
+## How to create a semantic search engine
+
+In our movie application, we want to be able to search for movies based on their plot. We want to be able to search movies based on the meaning of the search terms, not just the words themselves.
+
+As an example, we want to be able to search for "apprentice wizard" and find movies like "Harry Potter and the Sorcerer's Stone" and "Harry Potter and the Chamber of Secrets".
+
+Even if the words "apprentice" and "wizard" don't appear in the movie titles or plot, we want to be able to find them.
+
+You could use something similar to provide your customers with items that are similar to the ones they are looking at. For example, if a customer is looking at a pair of hiking boots, you could show them other equipment they might need.
+
+## Where does MongoDB come in?
+
+With its document model, MongoDB is a great fit for storing vectors. You can store vectors as arrays of numbers in a document.
+
+When comes time to search for the relevant results, we can leverage the power of Lucene, just like we did for the full-text search.

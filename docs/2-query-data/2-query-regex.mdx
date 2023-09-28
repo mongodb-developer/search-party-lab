@@ -1,0 +1,52 @@
+---
+sidebar_position: 2
+---
+# 🦸 Querying with Regexes
+
+In the last step, you learned how to query for documents that match a specific value. In this step, you'll learn how to query for documents that match a pattern.
+
+This is similar to doing a `LIKE` query in SQL.
+
+## Edit the regex endpoint
+
+In the `server/controllers/movies.mjs` file, you will notice a method called `findWithRegex`. This is where we'll add the code to query the collection with a regex.
+
+Using the almost same code you used in the previous step, add the code needed to query the data using a regex. To do so, you need to change the value passed in the query to a regular expression rather than the parameter directly.
+
+To do so, you will need to use the `$regex` operator. You can find more about this operator in the [documentation](https://www.mongodb.com/docs/manual/reference/operator/query/regex/).
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+  async findWithRegex(searchTerm) {
+    const movies = await collection
+      .find({ title: {$regex: new RegExp(searchTerm, "i")} }, {
+        title: 1,
+        year: 1,
+        "imdb.rating": 1,
+        fullplot: 1,
+        poster: 1,
+        released: 1,
+        genres: 1
+      })
+      .limit(20)
+      .toArray();
+    return movies;
+  }
+```
+</div>
+</details>
+
+## Test it out
+
+Try it out. In the client, change the dropdown to `Regex Query`, and type in a partial name. You should see the results filtered by the regex. Something like `Terminator` should now return multiple results.
+
+## Problems with this approach
+
+This approach works, but it's not ideal. The reason it's not very efficient is that it has to scan the entire collection to find the matches. This is because the regex is not indexed.
+
+That doesn't mean you should never use regexes to query. If you have a small collection, it's not a big deal. But if you have a large collection, it can be a problem.
+
+A good use case for a regex is when you want to match documents _starting_ with a certain string. For example, if you wanted to find all movies whose title starts with "A", you could use the regex `/^A/`. This would be a good use case for a regex as it can still leverage the index on the `title` field.

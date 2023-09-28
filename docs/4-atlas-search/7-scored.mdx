@@ -1,0 +1,113 @@
+---
+sidebar_position: 7
+---
+
+# 🦸 Better results with scoring
+
+In information retrieval, relevance scoring is a technique used to evaluate how closely a document matches a query. Atlas Search is built on Apache Lucene. Lucene utilizes a combination of the Vector Space Model (VSM) and the Boolean model to determine the relevance score of each search result. The VSM assesses the similarity between the query and the document, while the Boolean model determines if the document contains all the query terms. Based on these factors, Lucene assigns a score to each search result, indicating its relevance to the query.
+
+:::tip
+The aggregation that we used just now returns multiple documents. Among the results are the expected `Harry Potter` but also `Dirty Harry`, and more. All of these are one character away from `Hary`! To get the most popular movie showing up first in the results, you can use the `function` to alter the relevance score.
+:::
+
+You can see what's the score for each returned document by amending the `$project` stage.
+
+1. Scroll down to **Stage 2** and add the following.
+
+```js
+  {
+    title: 1,
+    year: 1,
+    "imdb.rating": 1,
+    fullplot: 1,
+    poster: 1,
+    released: 1,
+    genres: 1,
+    score: { $meta: "searchScore" }
+  }
+```
+
+On the right, you'll see the documents with the highest score first. You can also notice that the documents have the same score or a very close score. That's because all texts are 'one character away' from the query.
+
+1. Scroll up to **Stage 1** and add a scoring function. Here, you're adding 10 points for every award the movie won to the relevance score.
+
+    ```js
+    {
+      index: "default",
+      text: {
+        query: "hary",
+        path: "title",
+        fuzzy: {
+            maxEdits: 1
+        },
+        score: {
+          function: {
+            add: [
+              { score: 'relevance' },
+              { multiply: [{constant: 10}, { path: 'awards.wins' }] }
+            ]
+          }
+        }
+      }
+    }
+    ```
+
+You're modifying the default relevance score by using the `function` option. The function calculates the score by adding the 10 points for every `awards.wins` to the relevance score. That way, the movie with the highest `awards.wins` value will rank first in the search results.
+
+
+
+## Add it to your application
+
+There is a method ready for you to use in the `server/controllers/movies.mjs` file. Open up the file and find the `scoredSearch` method. Replace the code with your new aggregation pipeline that will do fuzzy searching, and return the movies that won the most awards.
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+  async scoredSearch(searchTerm) {
+    const movies = await collection
+      .aggregate([
+        {
+          $search: {
+            index: "default",
+            text: {
+              query: searchTerm,
+              path: "title",
+              fuzzy: {
+                  maxEdits: 1
+              },
+              score: {
+                function: {
+                  add: [
+                    {multiply: [
+                      { path: 'awards.wins' },
+                      { constant: 10 },
+
+                    ]},
+                    { score: 'relevance' }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            title: 1,
+            year: 1,
+            "imdb.rating": 1,
+            fullplot: 1,
+            poster: 1,
+            released: 1,
+            genres: 1,
+            score: { $meta: "searchScore" }
+          }
+        }
+      ]).toArray();
+
+    return movies;
+  }
+```
+</div>
+</details>

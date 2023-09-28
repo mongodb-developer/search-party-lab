@@ -1,0 +1,54 @@
+---
+sidebar_position: 5
+---
+
+# Add full-text search to your application
+
+You now know everything you need to add full-text search capabilities to your application.
+
+Open up the code from the server file `server/controllers/movies.mjs` once more, and edit the `search` method to use full-text search.
+
+:::tip
+You'll need to use the `aggregate` method instead of the `find` method you used earlier. Check out the [documentation](https://www.mongodb.com/docs/manual/reference/method/db.collection.aggregate/) for more details.
+:::
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+  async search(searchTerm) {
+    const movies = await collection
+      .aggregate([
+        {
+          $search: {
+            index: "default",
+            text: {
+              query: searchTerm,
+              path: {
+                wildcard: "*",
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            title: 1,
+            year: 1,
+            "imdb.rating": 1,
+            fullplot: 1,
+            poster: 1,
+            released: 1,
+            genres: 1
+          },
+        },
+        {
+          $limit: 20
+        }
+      ]).toArray();
+
+    return movies;
+  }
+```
+</div>
+</details>

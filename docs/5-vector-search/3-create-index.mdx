@@ -1,0 +1,59 @@
+---
+sidebar_position: 3
+---
+
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
+# Create Vector Search indexes
+
+To start using Vector Search, you must configure another search index on your database. The process is similar to what you have done in the last section.
+
+## Step-by-step guide to creating your Vector Search index
+
+1. Open the **Database Deployments** page in MongoDB Atlas and select **Create Index** in the lower right corner.
+
+    <img
+        alt="The 'Database Deployments' page with the 'Create Index' link highlighted"
+        src={useBaseUrl('/img/chapter-2-search-indexes/database-deployments-create-index.png')}
+    />
+
+1. Click the **Create Search Index** button.
+
+    <img
+        alt="The 'Search' section of the cluster details page with the 'Create Search Index' button highlighted"
+        src={useBaseUrl('/img/chapter-2-search-indexes/create-search-index.png')}
+    />
+
+1. This time, you will use the **JSON Editor** to create your index
+
+    <img
+        alt="The 'Configuration Method' step of creating a new search index"
+        src={useBaseUrl('/img/chapter-2-search-indexes/search-index-config-method.png')}
+    />
+
+1. Select your database and collection, change the index name to `vectorsearch`, and add the following code in the JSON editor:
+
+```js
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "plot_embedding": {
+      "dimensions": 1536,
+      "similarity": "cosine",
+      "type": "knnVector"
+      }
+    }
+  }
+}
+```
+
+Your configuration should look like this.
+
+<img
+  alt="The 'Configuration Method' step of creating a new search index"
+  src={useBaseUrl('/img/chapter-5-vector-search/search-index-config-json.png')}
+  />
+
+1. The final step allows you to review the index configuration and refine it if needed. Go ahead and click **Create Search Index**.
+
