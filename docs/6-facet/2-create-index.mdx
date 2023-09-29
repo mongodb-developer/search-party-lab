@@ -1,0 +1,25 @@
+# 🦸 Create an index
+
+In order to use faceting, you will need to create the appropriate index.
+
+Create a new search index using the JSON editor. Use the following JSON for your index definition.
+
+```json
+{
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "genres": {
+        "type": "stringFacet"
+      },
+      "year": {
+        "type": "number"
+      }
+    }
+  }
+}
+```
+
+Proceed like you did in the previous exercises to create a new index.
+
+Once the index is ready, you can proceed to the next step.

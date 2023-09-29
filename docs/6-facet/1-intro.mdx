@@ -1,0 +1,27 @@
+# 🦸 Intro to facets
+
+A facet is a way to group documents together based on a common value.  For example, if you have a list of movies, you might want to group them by genre. You could then use the facet to filter the results to only show movies of a certain genre.
+
+A common use case is to use facets to create a filter. You can see this in most e-commerce sites. For example, you will see a list of categories on the left side of the page, and each category will have a number next to it. This number represents the number of products in that category.
+
+
+
+
+
+{
+      "facet": {
+        "operator": {
+          "range": {
+            "path": "year",
+            "gte": 2000,
+            "lte": 2015
+          }
+        },
+        "facets": {
+          "genresFacet": {
+            "type": "string",
+            "path": "genres"
+          }
+        }
+      }
+    }

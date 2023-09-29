@@ -1,0 +1,36 @@
+# 🦸 Query with facets
+
+Now that your index is in place, you can query using it.
+
+You will need to use the `$searchMeta` aggregation stage to query your data. You can find more about this stage, and how to use it in the <Link to="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-searchMeta">Atlas Search documentation</Link>.
+
+Now that you have an index on the `genres` and `year` fields, try creating a query that returns the number of books in each genre, for books published in the 2000's.
+
+<details>
+  <summary>Click to see the answer</summary>
+  <div>
+
+```js
+{
+  $searchMeta: {
+    "facet": {
+      "operator": {
+        "range": {
+          "path": "year",
+          "gte": 2000,
+          "lte": 2010
+        }
+      },
+      "facets": {
+        "genresFacet": {
+          "type": "string",
+          "path": "genres"
+        }
+      }
+    }
+  }
+}
+```
+
+  </div>
+</details>
