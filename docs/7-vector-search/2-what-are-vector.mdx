@@ -14,21 +14,25 @@ Computers can't understand text. They can only understand numbers. So, we need a
 
 Using vectors, we can plot text in a multi-dimensional space. It is hard to visualize a multi-dimensional space, so let's start with a 2-dimensional space.
 
-Imagine a plot with a x and y axis. Our ML model will plot the words "cat", "dog", "cute" and "social".
+Imagine a plot with a x and y axis. Our ML model will plot various points on this plot. This could represent words, sentences, paragraphs, documents, or even images.
 
-![Points on a chart](/img/7-vector-search/1-plot.png)
+The position where the points are plotted is determined by the model you used. The models converts the data you passed it into a vector. Then, it plots the vector on the chart.
 
-The ML model will plot the words based on their meaning. Words with similar meanings will be plotted close together. Words with different meanings will be plotted far apart.
+![Points on a chart](/img/7-vector-search/1-vectors.png)
 
-When doing a search, we will create a new vector for the search term. Then, we will find the closest words to the search term. The closest words will be the words that are plotted closest to the search term.
+When doing a search, we will create a new vector for the search term. We then plot this new vector on the chart.
 
-As an example, if we search for pets, we might get "dogs" and "cats".
+![Search term on a chart](/img/7-vector-search/2-vectors-query.png)
 
-![Search for pets](/img/7-vector-search/2-pets.png)
+Then, we will find the closest words to the search term. The closest words will be the words that are plotted closest to the search term.
 
-However, if we search for pet characteristics, we might get "cute" and "cat".
+The closest term will depend on the algorithm you use to calculate the distance between vectors. Using Euclidian distance, the closest words will be the words that are closest to the search term.
 
-![Search for pet characteristics](/img/7-vector-search/3-characteristics.png)
+![Closest words](/img/7-vector-search/3-euclidian.png)
+
+Vector search also provides a cosine algorithm. Using cosine distance, the closest words will be the words that are closest to the search term, but in the same direction.
+
+![Closest words](/img/7-vector-search/4-cosine.png)
 
 ## How Do We Create Vectors?
 

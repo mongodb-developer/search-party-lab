@@ -1,0 +1,25 @@
+# Create vectors from your data
+
+In order to search your data, you will need to create embeddings for your documents. Embeddings are vectors that represent your documents in a vector space. The vector space is a multi-dimensional space where each dimension represents a feature of your documents.
+
+Many services offer pre-trained models that you can use to create embeddings for your documents.
+
+For this tutorial, we will provide you with an endpoint that will return the embeddings for a given search term.
+
+:::note
+If you want to learn how to create your own vectors, check out the next sections that will guide you through the process with some of the most popular providers.
+:::
+
+
+## Configuring the application
+
+In your `server/.env` file, you'll find a few variables that you can use to configure the application.
+
+The first one is `EMBEDDINGS_SOURCE`. It tells the application where to get the embeddings from. You can set it to `serverlessEndpoint`.
+
+Your instructor will provide you with an API key that you can use for the event you're attending. Set it in the `EMBEDDING_KEY` variable.
+
+```
+EMBEDDINGS_SOURCE=serverlessEndpoint
+EMBEDDING_KEY=<API Key>
+```
