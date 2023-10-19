@@ -8,6 +8,7 @@
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   margin-bottom: 10px;
+  cursor: not-allowed;
 }
 
 /* Container for columns and the top "toolbar" */
