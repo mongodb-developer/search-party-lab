@@ -4,7 +4,7 @@
 // Change here to customise config
 
 // Name of the Github Repo
-const workshopName = 'search-party-lab';
+const workshopName = 'search-lab';
 // Change this if hosting outside mongodb-developer
 const organizationName = "mongodb-developer";
 
