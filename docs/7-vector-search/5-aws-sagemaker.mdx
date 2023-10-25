@@ -4,18 +4,106 @@
 It also enables developers to deploy ML models on embedded systems and edge-devices. SageMaker was launched in November 2017 and has been improved ever since, especially since the increased popularity and demand of ML and AI systems in recent years.
 
 To make it easier to get started, Amazon SageMaker JumpStart provides a set of solutions for the most common use cases that can be deployed readily with just a few clicks.
-Amazon SageMaker is available for free, for 2 months, as part of the AWS Free Tier program. Users can get access to 250 hours per month of ml.t3.medium notebooks usage with the Free Tier.
+
+Amazon SageMaker is available for free, for 2 months, as part of the AWS Free Tier program. Users can get access to 250 hours per month of `ml.t3.medium` notebooks usage with the Free Tier.
 
 <Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/0-pricing.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
 
 ## Getting Started with Amazon SageMaker
-Amazon SageMaker JumpStart helps you quickly and easily get started with machine learning. The solutions are fully customizable and supports one-click deployment and fine-tuning of more than 150 popular open source models such as natural language processing, object detection, and image classification models. Popular solutions include:
-- Extract & Analyze Data: Automatically extract, process, and analyze documents for more accurate investigation and faster decision making.
+Amazon SageMaker JumpStart helps you quickly and easily get started with machine learning. The solutions are fully customizable and supports one-click deployment and fine-tuning of more than 150 popular open source models such as natural language processing, object detection, and image classification models.
+
+Popular solutions include:
+- Extract & Analyze Data: Automatically extract, process, and analyze documents for more accurate investigation and faster decision-making.
 - Fraud Detection: Automate detection of suspicious transactions faster and alert your customers to reduce potential financial loss.
 - Churn Prediction: Predict likelihood of customer churn and improve retention by honing in on likely abandoners and taking remedial actions such as promotional offers.
 - Personalized Recommendations: Deliver customized, unique experiences to customers to improve customer satisfaction and grow your business rapidly.
 
+## Let's set up a playground for you to try it out!
 
-
+On the main page of SageMaker you'll find the option to `Set up for single user` or `Set up for organization`. These will set up a domain and a quick start user.
 
 <Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/1-main-page.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/2-setup-started.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/3-preparing-domain.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+The initial setup only has to be done once, but it might take several minutes. When finished, SageMaker will notify you about the new domain being ready.
+
+[Amazon SageMaker Domain](https://docs.aws.amazon.com/sagemaker/latest/dg/sm-domain.html) supports SageMaker machine learning (ML) environments. A SageMaker Domain is composed of the following entities:
+- `Domain`: An Amazon SageMaker Domain consists of an associated Amazon Elastic File System (Amazon EFS) volume; a list of authorized users; and a variety of security, application, policy, and Amazon Virtual Private Cloud (Amazon VPC) configurations. Users within a Domain can share notebook files and other artifacts with each other. An account can have multiple Domains. For more information about multiple Domains, see Multiple Domains Overview.
+- `UserProfile`: A user profile represents a single user within a Domain. It is the main way to reference a user for the purposes of sharing, reporting, and other user-oriented features. This entity is created when a user onboards to the Amazon SageMaker Domain. For more information about user profiles, see Domain User Profiles.
+- `shared space`: A shared space consists of a shared JupyterServer application and shared directory. All users within the Domain have access to the shared space. All user profiles in a Domain have access to all shared spaces in the Domain. For more information about shared spaces, see Collaborate with shared spaces.
+- `App`: An app represents an application that supports the reading and execution experience of the user’s notebooks, terminals, and consoles. The type of app can be JupyterServer, KernelGateway, RStudioServerPro, or RSession. A user may have multiple apps active simultaneously.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/4-domain-ready.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+Now that the domain is set up, you want to open one of the built-in apps to actually work on your environment.
+
+Amazon SageMaker supports the following [machine learning environments](https://docs.aws.amazon.com/sagemaker/latest/dg/machine-learning-environments.html).
+- Amazon SageMaker Studio: Lets you build, train, debug, deploy, and monitor your machine learning models.
+- Amazon SageMaker Notebook Instances: Lets you prepare and process data, and train and deploy machine learning models from a compute instance running the Jupyter Notebook application.
+- Amazon SageMaker Studio Lab: Studio Lab is a free service that gives you access to AWS compute resources, in an environment based on open-source JupyterLab, without requiring an AWS account.
+- Amazon SageMaker Canvas: Gives you the ability to use machine learning to generate predictions without needing to code.
+- Amazon SageMaker geospatial: Gives you the ability to build, train, and deploy geospatial models.
+- RStudio on Amazon SageMaker: RStudio is an IDE for R, with a console, syntax-highlighting editor that supports direct code execution, and tools for plotting, history, debugging and workspace management.
+
+For this workshop we will use the Studio, which can be opened by clicking on `Launch`.
+
+[Amazon SageMaker Studio](https://docs.aws.amazon.com/sagemaker/latest/dg/studio.html) is a web-based, integrated development environment (IDE) for machine learning that lets you build, train, debug, deploy, and monitor your machine learning models. SageMaker Studio provides all the tools you need to take your models from data preparation to experimentation to production while boosting your productivity. In a single unified visual interface, customers can perform the following tasks:
+- Write and execute code in Jupyter notebooks
+- Prepare data for machine learning
+- Build and train machine learning models
+- Deploy the models and monitor the performance of their predictions
+- Track and debug the machine learning experiments
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/5-open-studio.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+When opening the studio, you will be redirected to your domain.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/6-domain-redirect.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+When opening Amazon SageMaker Studio for the first time, a JupyterServer application will be created at your domain.
+
+An [Amazon SageMaker notebook instance](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi.html) is a machine learning (ML) compute instance running the Jupyter Notebook App. SageMaker manages creating the instance and related resources. Use Jupyter notebooks in your notebook instance to prepare and process data, write code to train models, deploy models to SageMaker hosting, and test or validate your models.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/7-creating-JupyterServer-app.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+In some cases the loading can take a while and SageMaker will offer you to clear the workspace. Just click `Keep Waiting` for now.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/8-notebook-loading-screen.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+Once the Studio is loaded you will be presented with the following. This is your domains workspace in which you can adjust anything around it.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/9-studio-homepage.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+As a first step, we want to choose a model that we want to work with. You can find the models in the SageMaker JumpStart section. We will start with a simple text generation at first. Choose `Flan-T5 Xl`.
+This is a decently complex model that offers a good starting point. There are more complex models available for which you'd need bigger AWS EC2 instances to run them on, so choosing a smaller model to get started is a good choice.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/10-sagemaker-jumpstart.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+You'll find option to deploy your model or train it.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/11-flan-t5-xl-deploy.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+Everything we need to get started can be found inside the `Notebook` section.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/12-flan-t5-xl-notebook.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+When opening a notebook, we can use the default settings for now.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/13-notebook-environment.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+The notebook is already prepared with everything you need to play around. Deploying the model and even some examples to see it in action. When opening the notebook, the kernel will be started automatically.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/14-notebook-starting.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+After this has been successfully happened you can `Run All Cells`.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/15-notebook-ready.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+Cells that have been run show a number in brackets to the left of them. The number is the order in which they got executed. When using the `Run All Cells` option they get executed from top to bottom.
+But you can execute (and re-execute) any cell at any time out of order. As you can see in the following screenshot, the result will be printed right below the cell.
+
+<Screenshot src="img/screenshots/7-vector-search/5-aws-sagemaker/16-inference-code-example.png" url="https://aws.amazon.com/pm/sagemaker/" alt="AWS SageMaker" />
+
+Go ahead and adjust the text input, see how the results change. The SageMaker JumpStart notebook also provides documentation for each cell to explain what happens.
+This will provide you with a good starting point to your journey into Amazon SageMaker.
