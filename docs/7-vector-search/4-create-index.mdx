@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Create Vector Search indexes
 
 To start using Vector Search, you must configure another search index on your database. The process is similar to what you have done in the last section.
@@ -20,6 +23,27 @@ This time, you will use the **JSON Editor** to create your index
 
 Select your database and collection, change the index name to `vectorsearch`, and add the following code in the JSON editor:
 
+<Tabs>
+  <TabItem value="serverless" label="Serverless Endpoint" default>
+
+```js
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "vectorizedSynopsis": {
+        "dimensions": 1408,
+        "similarity": "cosine",
+        "type": "knnVector"
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem value="openai" label="OpenAI" default>
+
 ```js
 {
   "mappings": {
@@ -34,6 +58,45 @@ Select your database and collection, change the index name to `vectorsearch`, an
   }
 }
 ```
+
+  </TabItem>
+  <TabItem value="googleVertex" label="Google Vertex">
+
+```js
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "vectorizedSynopsis": {
+        "dimensions": 1408,
+        "similarity": "cosine",
+        "type": "knnVector"
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+  <TabItem value="sagemaker" label="AWS SageMaker">
+
+```js
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "vectorizedSynopsis": {
+        "dimensions": 1408,
+        "similarity": "cosine",
+        "type": "knnVector"
+      }
+    }
+  }
+}
+```
+
+  </TabItem>
+</Tabs>
 
 Your configuration should look like this.
 

@@ -1,0 +1,35 @@
+# Import Vectorized Data
+
+In the context of this workshop, you might not have enough time to vectorize your own data. Therefore, we have provided a vectorized version of the data for you to use.
+
+The data has been pre-encoded using various providers, so you can use the one that you are most comfortable with.
+
+Keep in mind that your queries will need to be encoded with the same provider as the data.
+
+The model that was used for each data set is listed below:
+
+| Data Set | Model |
+| -------- | ----- |
+| Google Vertex | multimodalembedding@001 |
+| OpenAI | text-embedding-ada-002 |
+| SageMaker |   |
+
+## Import the embeddings
+
+To import the dataset with the pre-created embeddings, you can use the [import tool](https://mdb.link/import-library-data) that you used earlier.
+
+Enter your connection string in the text box at the top, and pick your provider from the dropdown at the bottom of the screen.
+
+<Screenshot src="/img/screenshots/7-vector-search/3-create-vectors/2-import-data/1-import.png" url="https://mdb.link/import-library-data" />
+
+:::tip
+If unsure, or don't want to create your own embeddings, you can use the `OpenAI` provider.
+:::
+
+Once you picked your provider, click on the `Add Embeddings` button.
+
+:::warning
+This process will drop your existing `books` collection to replace it with a new one. Any existing indexes or changes to your collection will be lost.
+:::
+
+Once the import is complete, you will see a confirmation message.
