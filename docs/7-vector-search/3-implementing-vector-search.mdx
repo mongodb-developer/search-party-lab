@@ -1,0 +1,17 @@
+# Implementing Vector Search
+
+There are two components that you will need to do to implement vector search into your application.
+
+## Vectorize your dataset
+
+First, you will need to create this mathematical representation of your data. This is called vectorization. In the [Create Vectors](/docs/category/create-vectors) section, you will learn how to create vectors with some of the major encoders.
+
+In the context of this workshop, however, we already did the work for you. You will be able to import the data with the embeddings using the import tool you've used previously.
+
+## Vectorize your query
+
+The second component is to vectorize your query. This is the same process as vectorizing your dataset, but instead of vectorizing a large dataset, you are vectorizing a single query.
+
+It is important to use the same encoder for both your dataset and your query. This is because the encoder learns a specific way to represent the data. If you use a different encoder, the vectors will be different and the search will not work.
+
+For this workshop, you will be using one of the provided functions to vectorize your query. Again, the full code to do this on your own is in the [Create Vectors](/docs/category/create-vectors) section.
