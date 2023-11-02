@@ -4,6 +4,12 @@ Simply put, a vector is a list of numbers. For example, a vector of length 3 cou
 
 In AI, vectors are a mathematical representation of data.
 
+:::tip
+When it comes to GenAI, you will hear about vectors and embeddings. While they don't convey the exact meaning, you will often see the terms used interchangeably.
+
+Technically, an embedding is a vector that has been created by a model. For example, a model could convert a word into a vector. The vector would be the embedding for that word.
+:::
+
 Thanks to some of the latest advances in AI, we can now use vectors to represent words, sentences, paragraphs, and even entire documents. This is a huge breakthrough because it allows us to use AI to understand the meaning of text.
 
 Vectors can even be used to represent images, audio, and video, but we'll focus on text in this workshop.
@@ -35,5 +41,7 @@ Vector search also provides a cosine algorithm. Using cosine distance, the close
 ![Closest words](/img/7-vector-search/4-cosine.png)
 
 ## How Do We Create Vectors?
+
+The big breakthrough with GenAI is that developers can now easily use models that have been pre-trained, and made available freely online. These models have been trained on huge datasets, and are able to convert text (or any sort of data, really) into vectors.
 
 There are many ways to create vectors. In this workshop, we'll use a pre-trained model and an API that will return vectors for us.
