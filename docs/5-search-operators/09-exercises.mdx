@@ -9,7 +9,7 @@ No cheating! Try to only look at the answer after you gave it a try.
 Try adding fuzzy search to your application so it can find the correct books, even if the user makes a typo.
 
 :::tip
-Remember the fuzzy parameter of the `text` operator? This is where you'd use it.
+Remember the fuzzy parameter of the [`text`](https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref) operator? This is where you'd use it.
 :::
 
 <details>
@@ -45,7 +45,7 @@ public async searchBooks(query: string): Promise<Book[]> {
 The marketing team has decided that they want to promote the books of the month. They want to show these books first in the search results. How would you do this?
 
 :::tip
-You'll need to use the `compound` operator with multiple operators here. There is a `bookOfTheMonth` boolean field on some of the books that you could use.
+You'll need to use the [`compound`](https://www.mongodb.com/docs/atlas/atlas-search/compound/#std-label-compound-ref) operator with multiple operators here. There is a `bookOfTheMonth` boolean field on some of the books that you could use.
 :::
 
 <details>
@@ -98,7 +98,7 @@ public async searchBooks(query: string): Promise<Book[]> {
 You've noticed that readers tend to prefer shorter books. Without using a large score boost, try to promote shorter books in the search results.
 
 :::tip
-Even without a score adjuster, the "should" operator will still boost the score of the documents that match it.
+Even without a score adjuster, the [`should`](https://www.mongodb.com/docs/atlas/atlas-search/compound/#mongodb-data-should) operator will still boost the score of the documents that match it.
 :::
 
 <details>
