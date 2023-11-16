@@ -15,7 +15,7 @@ Your instructor will provide you with an API key that you can use for the event 
 
 If you are using one of the other providers, you can use the following settings in the file.
 
-<Tabs>
+<Tabs groupId="aiproviders">
   <TabItem value="serverless" label="Serverless Endpoint" default>
 
 ```
@@ -54,7 +54,7 @@ API_KEY=<API_KEY>
 
 
 
-Open up the code from the server file `server/controllers/books.ts` once more, and edit the `vectorSearch` method to query your data for semantic search.
+Open up the code from the server file `server/src/controllers/books.ts` once more, and edit the `searchBooks` method to query your data for semantic search.
 
 :::tip
 Use the `getEmbeddings` function to convert the query into a vector.

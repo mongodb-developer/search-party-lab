@@ -16,11 +16,11 @@ You now know everything you need to add full-text search capabilities to your ap
 
 ## Adding search to the library app
 
-Open up the code from the server file `server/controllers/books.ts`. In there, look for the `searchBooks` function.
+Open up the code from the server file `server/src/controllers/books.ts`. In there, look for the `searchBooks` function.
 
 Right now, it uses a regular expression to query the database.
 
-```js
+```js title='server/src/controllers/books.ts'
 public async searchBooks(query: string): Promise<Book[]> {
   const books = await collections?.books?.find({ title: {$regex: new RegExp(query, "i")} }).toArray();
   return books;
@@ -36,7 +36,7 @@ This code will go in the `server/src/controllers/books.ts` file, in the `searchB
 <summary>Click here to see the answer</summary>
 <div>
 
-```js
+```js title='server/src/controllers/books.ts'
 public async searchBooks(query: string): Promise<Book[]> {
   const aggregationPipeline = [
       {
