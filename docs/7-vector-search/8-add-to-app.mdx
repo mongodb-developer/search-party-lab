@@ -3,17 +3,17 @@ import TabItem from '@theme/TabItem';
 
 # 👐 Add semantic search to your application
 
-You now know everything you need to add full-text search capabilities to your application.
+You now know everything you need to add vector search capabilities to your application.
 
 ## Configuring the application
 
-In your `server/.env` file, you'll find a few variables that you can use to configure the application.
+In your `server/.env` file, you'll find a few variables that you can use to configure the application. We will add a couple more.
 
 The first one is `EMBEDDINGS_SOURCE`. It tells the application where to get the embeddings from. If you're following along in the context of an in-person lab, you can set it to `serverlessEndpoint`.
 
-Your instructor will provide you with an API key that you can use for the event you're attending. Set it in the `EMBEDDING_KEY` variable.
+Your instructor will provide you with an API key that you can use for the event you're attending. Set it in the `EMBEDDING_KEY` variable (or `API_KEY` for Amazon SageMaker).
 
-If you are using one of the other providers, you can use the following settings in the file.
+If you are using one of the other providers, you can use the following settings in the file `server/.env`.
 
 <Tabs groupId="aiproviders">
   <TabItem value="serverless" label="Serverless Endpoint" default>
@@ -67,16 +67,15 @@ Use the `getEmbeddings` function to convert the query into a vector.
 ```js
   const vector = await getEmbeddings(query);
   const aggregationPipeline = [
-      {
-          $search: {
-              index: "vectorsearch",
-              knnBeta: {
-                  vector,
-                  path: "embeddings",
-                  k: 20
-              }
-          }
+    {
+      $vectorSearch: {
+        queryVector:  vector,
+        path: "embeddings",
+        numCandidates: 100,
+        index: "vectorsearch",
+        limit: 100,
       }
+    }
   ];
   const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
   return books;

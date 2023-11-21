@@ -1,33 +1,32 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Construct vector search queries
 # 👐 Construct vector search queries
 
 Just as you did in the previous step, you can explore the search results using an aggregation pipeline.
 
 ## Querying with the aggregation builder
 
-Using the aggregation builder, or the MongoDB Shell, you can construct a pipeline that uses the `$search` stage to query the `vectorsearch` index.
+Using the aggregation builder, or the MongoDB Shell, you can construct a pipeline that uses the `$vectorSearch` [stage](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-stage/) to query the `vectorsearch` index.
 
-Add the following code for the `$search` stage.
+Add the following code for the `$vectorSearch` stage.
 
 ```js
 public async searchBooks(query: string): Promise<Book[]> {
-    const aggregationPipeline = [
-        {
-            $search: {
-            index: "vectorsearch",
-            knnBeta: {
-                vector: "vector goes here",
-                path: "embeddings",
-                k: 20
-            }
-            }
-        }
-    ];
-    const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
-    return books;
+  const aggregationPipeline = [
+    {
+      $vectorSearch: {
+        queryVector:  "vector goes here",
+        path: "embeddings",
+        numCandidates: 100,
+        index: "vectorsearch",
+        limit: 100,
+      }
+    }
+  ];
+
+  const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+  return books;
 }
 ```
 
@@ -95,4 +94,8 @@ This vector has 384 dimensions
 </div>
 </details>
 
-You should see a list of books related to cats. The word _cat_ may, or may not, be on the cover of the book. Our search returns results that are similar in context, but not in content. Notice that we're not using the search query parameter at all: we're always using for things related to cats in this example.
+You should see a list of books related to cats. The word _cat_ may, or may not, be on the cover of the book. Our search returns results that are similar in context, but not in content. 
+
+:::info
+Notice that in our code we're not using the search `query` parameter at all: we're always searching for things related to cats in this example, no matter what you type, as we're always searching for the same vector.
+:::
