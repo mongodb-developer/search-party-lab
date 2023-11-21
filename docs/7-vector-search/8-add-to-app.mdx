@@ -65,6 +65,7 @@ Use the `getEmbeddings` function to convert the query into a vector.
 <div>
 
 ```js
+public async searchBooks(query: string): Promise<Book[]> {
   const vector = await getEmbeddings(query);
   const aggregationPipeline = [
     {
@@ -79,6 +80,7 @@ Use the `getEmbeddings` function to convert the query into a vector.
   ];
   const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
   return books;
+}
 
 ```
 </div>
