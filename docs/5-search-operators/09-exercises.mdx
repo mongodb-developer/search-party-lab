@@ -63,7 +63,7 @@ public async searchBooks(query: string): Promise<Book[]> {
                 {
                   "text": {
                     query,
-                    "path": ["title", "author.name", "genres"],
+                    "path": ["title", "authors.name", "genres"],
                     fuzzy: {
                       maxEdits: 2
                     }
@@ -116,7 +116,7 @@ public async searchBooks(query: string): Promise<Book[]> {
                 {
                   "text": {
                     query,
-                    "path": ["title", "author.name", "genres"],
+                    "path": ["title", "authors.name", "genres"],
                     fuzzy: {
                       maxEdits: 2
                     }
