@@ -18,9 +18,9 @@ public async searchBooks(query: string): Promise<Book[]> {
       $vectorSearch: {
         queryVector:  "vector goes here",
         path: "embeddings",
-        numCandidates: 100,
+        numCandidates: 100,       // Number of nearest neighbors to use during the search.
         index: "vectorsearch",
-        limit: 100,
+        limit: 100,               // Number of documents to return in the results. Value can't exceed the value of numCandidates.
       }
     }
   ];
