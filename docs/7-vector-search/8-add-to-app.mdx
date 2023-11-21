@@ -32,7 +32,7 @@ EMBEDDING_KEY=sk-...
 ```
 
   </TabItem>
-  <TabItem value="googleVertex" label="Google Vertex">
+  <TabItem value="googleVertex" label="Google Cloud Vertex AI">
 
 ```
 EMBEDDINGS_SOURCE=googleVertex
@@ -70,9 +70,9 @@ Use the `getEmbeddings` function to convert the query into a vector.
     {
       $vectorSearch: {
         queryVector:  vector,
-        path: "embeddings",
+        path: 'embeddings',
         numCandidates: 100,
-        index: "vectorsearch",
+        index: 'vectorsearch',
         limit: 100,
       }
     }
