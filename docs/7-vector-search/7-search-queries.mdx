@@ -30,8 +30,6 @@ public async searchBooks(query: string): Promise<Book[]> {
 }
 ```
 
-The stage uses the `vectorsearch` index. Rather than using the 'text' operator as we did for full-text searches, we are using the <Link to="https://www.mongodb.com/docs/atlas/atlas-search/knn-beta/">knnBeta</Link> operator this time.
-
 For now, this stage will break. You will need to pass it a vector in the `vector` property.
 
 Paste the following vector to replace the `vector goes here` text. Choose the one from the embeddings provider you imported your data before.
