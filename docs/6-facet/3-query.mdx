@@ -13,6 +13,7 @@ Now that you have an index on the `genres` and `year` fields, try creating a que
 ```js
 {
   $searchMeta: {
+    "index": "facetsIndexName",
     "facet": {
       "operator": {
         "range": {
