@@ -21,23 +21,22 @@ This time, you will use the **JSON Editor** to create your index
 <Screenshot src="img/screenshots/7-vector-search/6-create-index/3-json-editor.png" alt="The 'Create Index' page with the 'JSON Editor' tab highlighted" url="https://cloud.mongodb.com" />
 
 
-Select your database and collection, change the index name to `vectorsearch`, and add the following code in the JSON editor:
+Select your database and the `books` collection, change the index name to `vectorsearch`, and add the following code in the JSON editor:
 
 <Tabs groupId="aiproviders">
   <TabItem value="serverless" label="Serverless Endpoint" default>
 
 ```js
 {
-  "mappings": {
-    "dynamic": true,
-    "fields": {
-      "embeddings": {
-        "dimensions": 1408,
-        "similarity": "cosine",
-        "type": "knnVector"
-      }
+  "type": "vectorSearch",
+  "fields":[
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 1408,
+      "similarity": "cosine"
     }
-  }
+  ]
 }
 ```
 
@@ -46,16 +45,15 @@ Select your database and collection, change the index name to `vectorsearch`, an
 
 ```js
 {
-  "mappings": {
-    "dynamic": true,
-    "fields": {
-      "embeddings": {
-        "dimensions": 1536,
-        "similarity": "cosine",
-        "type": "knnVector"
-      }
+  "type": "vectorSearch",
+  "fields":[
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 1536,
+      "similarity": "cosine"
     }
-  }
+  ]
 }
 ```
 
@@ -64,16 +62,15 @@ Select your database and collection, change the index name to `vectorsearch`, an
 
 ```js
 {
-  "mappings": {
-    "dynamic": true,
-    "fields": {
-      "embeddings": {
-        "dimensions": 1408,
-        "similarity": "cosine",
-        "type": "knnVector"
-      }
+  "type": "vectorSearch",
+  "fields":[
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 1408,
+      "similarity": "cosine"
     }
-  }
+  ]
 }
 ```
 
@@ -82,16 +79,15 @@ Select your database and collection, change the index name to `vectorsearch`, an
 
 ```js
 {
-  "mappings": {
-    "dynamic": true,
-    "fields": {
-      "embeddings": {
-        "dimensions": 384,
-        "similarity": "cosine",
-        "type": "knnVector"
-      }
+  "type": "vectorSearch",
+  "fields":[
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 384,
+      "similarity": "cosine"
     }
-  }
+  ]
 }
 ```
 
