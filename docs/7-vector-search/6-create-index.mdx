@@ -75,23 +75,6 @@ Select your database and the `books` collection, change the index name to `vecto
 ```
 
   </TabItem>
-  <TabItem value="sagemaker" label="Amazon SageMaker">
-
-```js
-{
-  "type": "vectorSearch",
-  "fields":[
-    {
-      "type": "vector",
-      "path": "embeddings",
-      "numDimensions": 384,
-      "similarity": "cosine"
-    }
-  ]
-}
-```
-
-  </TabItem>
 </Tabs>
 
 The final step allows you to review the index configuration and refine it if needed. Go ahead and click **Create Search Index**.
