@@ -65,23 +65,25 @@ To query the data, Vector Search will need to calculate the distance between the
 
 To do so, you will need to vectorize your query. You can use the same function to vectorize your query as well.
 
-In the library application, we've created a function that will vectorize your query for you. You can find it in the `server/embeddings/openai.mjs` file.
+In the library application, we've created a function that will vectorize your query for you. You can find it in the `server/src/embeddings/openai.ts` file.
 
 ```js
 import OpenAI from 'openai';
 
-const { OPENAI_API_KEY } = process.env;
+const { EMBEDDING_KEY } = process.env;
 
-const openai = new OpenAI({apiKey: OPENAI_API_KEY});
+let openai;
 
-const getEmbeddings = async (text) => {
-  const embeddings = await openai.embeddings.create({
-    model: "text-embedding-ada-002",
-    input: text,
-  });
-
-  return embeddings?.data[0]?.embeddings;
-}
+const getTermEmbeddings = async (text) => {
+    if (!openai) {
+        openai = new OpenAI({apiKey: EMBEDDING_KEY});
+    }
+    const embeddings = await openai.embeddings.create({
+        model: 'text-embedding-ada-002',
+        input: text,
+    });
+    return embeddings?.data[0]?.embedding;
+};
 
 export default getTermEmbeddings;
 ```
