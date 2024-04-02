@@ -1,0 +1,224 @@
+# 🦸 Using Amazon SageMaker
+
+:::info
+Extra activity, do it if you have extra time or are following at home, won't be covered during the hands-on Lab.
+:::
+
+[Amazon SageMaker](https://aws.amazon.com/pm/sagemaker/) is a cloud-based, machine-learning platform that enables developers to build, train, and deploy machine learning (ML) models for any use case with fully managed infrastructure, tools, and workflows.
+
+## Getting Started With Amazon SageMaker
+
+Amazon SageMaker JumpStart helps you quickly and easily get started with machine learning. The solutions are fully customizable and support one-click deployment and fine-tuning of more than 150 popular open-source models, such as natural language processing, object detection, and image classification models.
+
+It includes a number of popular solutions:
+- Extract and analyze data: Automatically extract, process, and analyze documents for more accurate investigation and faster decision-making.
+- Fraud detection: Automate detection of suspicious transactions faster and alert your customers to reduce potential financial loss.
+- Churn prediction: Predict the likelihood of customer churn and improve retention by honing in on likely abandoners and taking remedial actions such as promotional offers.
+- Personalized recommendations: Deliver customized, unique experiences to customers to improve customer satisfaction and grow your business rapidly.
+
+## Let's set up a playground for you to try it out!
+
+:::warning
+Before we start, make sure you choose a region that is supported for `RStudio` (more on that later) and `JumpStart`. You can check both on the [Amazon SageMaker pricing](https://aws.amazon.com/sagemaker/pricing/) page by checking if your desired region appears in the `On-Demand Pricing` list.
+:::
+
+[On the main page of Amazon SageMaker](https://aws.amazon.com/sagemaker/), you'll find the option to `Set up for a single user`. This will set up a domain and a quick-start user.
+
+![Amazon SageMaker landing page](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/001.png)
+
+A QuickSetupDomain is basically just a default configuration so that you can get started deploying models and trying out SageMaker. You can customize it later to your needs.
+
+The initial setup only has to be done once, but it might take several minutes. When finished, Amazon SageMaker will notify you that the new domain is ready.
+
+[Amazon SageMaker Domain](https://docs.aws.amazon.com/sagemaker/latest/dg/sm-domain.html) supports Amazon SageMaker machine learning (ML) environments and contains the following:
+
+- The domain itself, which holds an AWS EC2 that models will be deployed onto. This inherently contains a list of authorized users and a variety of security, application, policy, and Amazon Virtual Private Cloud (Amazon VPC) configurations.
+- The `UserProfile`, which represents a single user within a domain that you will be working with.
+- A `shared space`, which consists of a shared JupyterServer application and shared directory. All users within the domain have access to the same shared space.
+- An `App`, which represents an application that supports the reading and execution experience of the user’s notebooks, terminals, and consoles.
+
+![Domain details in SageMaker after being created](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/002.png)
+
+After the creation of the domain and the user, you can launch the SageMaker Studio, which will be your platform to interact with SageMaker, your models, and deployments for this user.
+
+![How to open the Studio](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/003.png)
+
+[Amazon SageMaker Studio](https://docs.aws.amazon.com/sagemaker/latest/dg/studio.html) is a web-based, integrated development environment (IDE) for machine learning that lets you build, train, debug, deploy, and monitor your machine learning models.
+
+Here, we’ll go ahead and start with a new JumpStart solution.
+
+![How to start JumpStart](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/004.png)
+
+All you need to do to set up your JumpStart solution is to choose a model. For this tutorial, we will be using an embedding model called `All MiniLM L6 v2` by Hugging Face.
+
+![Choose your JumpStart model](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/005.png)
+
+When choosing the model, click on `Deploy` and SageMaker will get everything ready for you.
+
+![The All MiniLM L6 v2](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/006.png)
+
+You can adjust the endpoint to your needs but for this tutorial, you can totally go with the defaults.
+
+![Model deployment settings](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/007.png)
+
+As soon as the model shows its status as `In service`, everything is ready to be used.
+
+![Endpoint summary](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/008.png)
+
+Note that the endpoint name here is `jumpstart-dft-hf-textembedding-all-20240117-062453`. Note down your endpoint name — you will need it in the next step.
+
+## Using the model to create embeddings
+
+Now that the model is set up and the endpoint ready to be used, we can expose it for our server application.
+
+We won’t be exposing the SageMaker endpoint directly. Instead, we will be using AWS API Gateway and AWS Lambda.
+
+Let’s first start by creating the lambda function that uses the endpoint to create embeddings.
+
+AWS Lambda is an event-driven, serverless computing platform provided by Amazon as a part of Amazon Web Services. It is designed to enable developers to run code without provisioning or managing servers. It executes code in response to events and automatically manages the computing resources required by that code.
+
+In the main AWS Console, go to `AWS Lambda` and click `Create function`.
+
+![AWS Lambda](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/009.png)
+
+Choose to `Author from scratch`, give your function a name (`sageMakerLambda`, for example), and choose the runtime. For this example, we’ll be running on Python.
+
+![Creating an AWS Lambda function](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/010.png)
+
+When everything is set correctly, create the function.
+
+![Lambda function settings](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/011.png)
+
+The following code snippet assumes that the lambda function and the Amazon SageMaker endpoint are deployed in the same AWS account. All you have to do is replace `<YOUR_ENDPOINT_NAME>` with your actual endpoint name from the previous section.
+
+Note that the `lambda_handler` returns a status code and a body. It’s ready to be exposed as an endpoint, for using AWS API Gateway.
+
+```
+import json
+import boto3
+
+sagemaker_runtime_client = boto3.client("sagemaker-runtime")
+
+def lambda_handler(event, context):
+    try:
+        # Extract the query parameter 'query' from the event
+        query_param = event.get('queryStringParameters', {}).get('query', '')
+
+        if query_param:
+            embedding = get_embedding(query_param)
+            return {
+                'statusCode': 200,
+                'body': json.dumps({'embedding': embedding})
+            }
+        else:
+            return {
+                'statusCode': 400,
+                'body': json.dumps({'error': 'No query parameter provided'})
+            }
+
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def get_embedding(synopsis):
+    input_data = {"text_inputs": synopsis}
+    response = sagemaker_runtime_client.invoke_endpoint(
+        EndpointName="<YOUR_ENDPOINT_NAME>",
+        Body=json.dumps(input_data),
+        ContentType="application/json"
+    )
+    result = json.loads(response["Body"].read().decode())
+    embedding = result["embedding"][0]
+    return embedding
+```
+
+Don’t forget to click `Deploy`!
+
+![Lambda code editor](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/012.png)
+
+One last thing we need to do before we can use this lambda function is to make sure it actually has permission to execute the SageMaker endpoint. Head to the `Configuration` part of your Lambda function and then to `Permissions`. You can just click on the `Role Name` link to get to the associated role in AWS Identity and Access Management (IAM).
+
+![Lambda permissions](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/013.png)
+
+In IAM, you want to expand `Add permissions`.
+
+![Lambda role](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/014.png)
+
+You can choose `Attach policies` to attach pre-created policies from the IAM policy list.
+
+![Role permissions](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/015.png)
+
+For now, let’s use the `AmazonSageMakerFullAccess`, but keep in mind to select only those permissions that you need for your specific application. Select that and click on `Add permissions`.
+
+![AmazonSageMakerFullAccess policy attached to the Lambda role](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/016.png)
+
+## Exposing your lambda function via AWS API Gateway
+
+Now, let’s head to AWS API Gateway, click `Create API`, and then `Build` on the `REST API`.
+
+![API Gateway REST API template](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/017.png)
+
+Choose to create a new API and name it. In this example, we’re calling it `sageMakerApi`.
+
+![Creating a REST API in API Gateway](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/018.png)
+
+That’s all you have to do for now. The API endpoint type can stay on regional, assuming you created the lambda function in the same region. Click `Create API`.
+
+![API Gateway settings](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/019.png)
+
+First, we need to create a new resource.
+
+![API Gateway resources](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/020.png)
+
+The resource path will be `/`. Pick a name like `sageMakerResource`.
+
+![API Gateway resource generation](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/021.png)
+
+Next, you'll get back to your API overview. This time, click `Create method`. We need a GET method that integrates with a lambda function.
+
+![Method creation](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/022.png)
+
+Check the `Lambda proxy integration` and choose the lambda function that you created in the previous section. Then, create the method.
+
+![Method configuration](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/023.png)
+
+Finally, don’t forget to deploy the API.
+
+![Deploying the resource](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/024.png)
+
+Choose a stage. This will influence the URL that we need to use (API Gateway will show you the full URL in a moment). Since we’re still testing, `TEST` might be a good choice.
+
+![Deployment settings](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/025.png)
+
+This is only a test for a tutorial, but before deploying to production, please also add security layers like API keys. When everything is ready, the `Resources` tab should look something like this.
+
+![Finished deployment](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/026.png)
+
+When sending requests to the API Gateway, we will receive the query as a URL query string parameter. The next step is to configure API Gateway and tell it so, and also tell it what to do with it.
+Go to your `Resources`, click on `GET` again, and head to the `Method request` tab. Click `Edit`.
+
+![Editing the method request](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/027.png)
+
+In the `URL query string parameters` section, you want to add a new query string by giving it a name. We chose `query` here. Set it to `Required` but not cached and save it.
+
+![Adding a query string parameter](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/028.png)
+
+The new endpoint is created. At this point, we can grab the URL and test it via cURL to see if that part worked fine. You can find the full URL (including stage and endpoint) in the `Stages` tab by opening the stage and endpoint and clicking on `GET`. For this example, it’s `https://4ug2td0e44.execute-api.ap-northeast-2.amazonaws.com/TEST/sageMakerResource`. Your URL should look similar.
+
+![Stages overview](/img/screenshots/7-vector-search/5-create-vectors/sagemaker/029.png)
+
+Using the Amazon Cloud Shell or any other terminal, try to execute a cURL request:
+
+```
+curl -X GET 'https://4ug2td0e44.execute-api.ap-northeast-2.amazonaws.com/TEST/sageMakerResource?query=foo'
+```
+
+If everything was set up correctly, you should get a result that looks like this (the array contains 384 entries in total):
+
+```
+{"embedding": [0.01623343490064144, -0.007662375457584858, 0.01860642433166504, 0.031969036906957626,................... -0.031003709882497787, 0.008777940645813942]}
+```
+
+Your embeddings REST service is ready. Congratulations! Now you can convert your data into a vector with 384 dimensions!
