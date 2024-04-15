@@ -48,30 +48,28 @@ In this case, we already have our index and we're going to edit it in the JSON e
 
 ```js
 {
-  "mappings": {
-    "dynamic": true,
-    "fields": {
-      "embeddings": {
-        "dimensions": 384,
-        "similarity": "cosine",
-        "type": "knnVector"
-      },
-      "language": {
-        "normalizer": "none",
-        "type": "token"
-      }
+  "fields": [
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 1536,
+      "similarity": "cosine"
+    },
+    {
+      "type": "filter",
+      "path": "language"
     }
-  }
+  ]
 }
 ```
 
-The only difference is that we've added this part, stating that `language` should be indexed as a [token](https://www.mongodb.com/docs/atlas/atlas-search/field-types/token-type/), not as a string (we're not going to do full text search here, but Vector Search)
+The only difference is that we've added this part, stating that `language` should be indexed as a [filter](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-type/#about-the-filter-type).
 
 ```js
-"language": {
-    "normalizer": "none",
-    "type": "token"
-}
+    {
+      "type": "filter",
+      "path": "language"
+    }
 ```
 
 Add that new aggregation pipeline in your code (`server/src/controllers/books.ts` inside the now familiar `searchBooks` method) and when searching, you'll get semantic results written in Spanish.
