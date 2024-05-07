@@ -9,7 +9,7 @@ Just as you did in the previous step, you can explore the search results using a
 
 Using the aggregation builder, or the MongoDB Shell, you can construct a pipeline that uses the `$vectorSearch` [stage](https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-stage/) to query the `vectorsearch` index.
 
-Add the following code for the `$vectorSearch` stage.
+Add the following code for the `$vectorSearch` stage. [Repo](https://github.com/mongodb-developer/library-management-system)
 
 ```js
 public async searchBooks(query: string): Promise<Book[]> {
