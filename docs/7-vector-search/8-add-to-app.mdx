@@ -7,7 +7,7 @@ You now know everything you need to add vector search capabilities to your appli
 
 ## Configuring the application
 
-In your `server/.env` file, you'll find a few variables that you can use to configure the application. We will add a couple more.
+In your `server/.env` [file](https://github.com/mongodb-developer/library-management-system/blob/main/server/.env), you'll find a few variables that you can use to configure the application. We will add a couple more.
 
 The first one is `EMBEDDINGS_SOURCE`. It tells the application where to get the embeddings from. If you're following along in the context of an in-person lab, you can set it to `serverlessEndpoint`.
 
@@ -46,7 +46,7 @@ PROJECT_LOCATION=<Project Location>
 
 
 
-Open up the code from the server file `server/src/controllers/books.ts` once more, and edit the `searchBooks` method to query your data for semantic search.
+Open up the code from the server [file](https://github.com/mongodb-developer/library-management-system/blob/main/server/src/controllers/books.ts) `server/src/controllers/books.ts` once more, and edit the `searchBooks` method to query your data for semantic search.
 
 :::tip
 Use the `getEmbeddings` function to convert the query into a vector.
