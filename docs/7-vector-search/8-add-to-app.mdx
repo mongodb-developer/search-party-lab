@@ -5,46 +5,20 @@ import TabItem from '@theme/TabItem';
 
 You now know everything you need to add vector search capabilities to your application.
 
-## Configuring the application
+## Configuring the environment variables
 
-In your `server/.env` [file](https://github.com/mongodb-developer/library-management-system/blob/main/server/.env), you'll find a few variables that you can use to configure the application. We will add a couple more.
+In your `server/.env` [file](https://github.com/mongodb-developer/library-management-system/blob/main/server/.env), you'll find a few variables that you can use to configure the application. Add a couple more at the end of the file to configure the embeddings source and the API key.
 
-The first one is `EMBEDDINGS_SOURCE`. It tells the application where to get the embeddings from. If you're following along in the context of an in-person lab, you can set it to `serverlessEndpoint`.
-
-Your instructor will provide you with an API key that you can use for the event you're attending. Set it in the `EMBEDDING_KEY` variable (or `API_KEY` for Amazon SageMaker).
-
-If you are using one of the other providers, you can use the following settings in the file `server/.env`.
-
-<Tabs groupId="aiproviders">
-  <TabItem value="serverless" label="Serverless Endpoint" default>
-
-```
+```json
 EMBEDDINGS_SOURCE=serverlessEndpoint
 EMBEDDING_KEY=<API Key>
 ```
 
-  </TabItem>
-  <TabItem value="openai" label="OpenAI" default>
+:::tip
+Your instructor will provide you with an API key that you can use for the event you're attending. Set it in the `EMBEDDING_KEY` variable.
+:::
 
-```
-EMBEDDINGS_SOURCE=openai
-EMBEDDING_KEY=sk-...
-```
-
-  </TabItem>
-  <TabItem value="googleVertex" label="Google Cloud Vertex AI">
-
-```
-EMBEDDINGS_SOURCE=googleVertex
-EMBEDDING_KEY="./path_to_your_credentials.json"
-PROJECT_ID=<Project ID>
-PROJECT_LOCATION=<Project Location>
-```
-
-  </TabItem>
-</Tabs>
-
-
+## Configuring the vector search query
 
 Open up the code from the server [file](https://github.com/mongodb-developer/library-management-system/blob/main/server/src/controllers/books.ts) `server/src/controllers/books.ts` once more, and edit the `searchBooks` method to query your data for semantic search.
 
@@ -78,4 +52,11 @@ public async searchBooks(query: string): Promise<Book[]> {
 </div>
 </details>
 
-To test it, try to search for things that have the same meaning, but using words that are not in the title, synopsis, etc. For instance "Canines doing stuff" should return books related to dogs.
+## Testing the semantic search
+
+To test the semantic search in the app, try to search for some books but use different words that have a similar meaning or are related to the book's cover.
+
+You can use the following queries:
+- Canines doing stuff
+- Fluffy animals
+- European history

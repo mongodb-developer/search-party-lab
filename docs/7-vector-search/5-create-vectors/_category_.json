@@ -1,8 +1,8 @@
 {
-    "label": "🦸 Create Vectors",
-    "position": 4,
+    "label": "🏡 Create Vectors",
+    "position": 999,
     "link": {
         "type": "generated-index",
-        "description": "In this section, you'll learn how to create embeddings from various providers."
+        "description": "This is a take-home activity. Do it if you're following at home. In this section, you'll learn how to create embeddings from various providers."
     }
 }
