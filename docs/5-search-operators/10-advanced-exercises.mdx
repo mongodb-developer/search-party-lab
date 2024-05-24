@@ -4,6 +4,64 @@
 Extra activity, do it if you have extra time or are following at home, these won't be covered during the hands-on Lab
 :::
 
+## Promote shorter books
+
+You've noticed that readers tend to prefer shorter books. Without using a large score boost, try to promote shorter books in the search results.
+
+:::tip
+Even without a score adjuster, the [`should`](https://www.mongodb.com/docs/atlas/atlas-search/compound/#mongodb-data-should) operator will still boost the score of the documents that match it.
+:::
+
+<details>
+  <summary>Answer</summary>
+  <div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+    const aggregationPipeline = [
+        {
+          $search: {
+            "index": "fulltextsearch",
+            "compound": {
+              "must": [
+                {
+                  "text": {
+                    query,
+                    "path": ["title", "authors.name", "genres"],
+                    fuzzy: {
+                      maxEdits: 2
+                    }
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "equals": {
+                    "value": true,
+                    "path": "bookOfTheMonth",
+                    "score": {
+                      "boost": { value: 10 }
+                    }
+                  }
+                },
+                {
+                  "range": {
+                    path: "pages",
+                    lt: 80
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ];
+    const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+    return books;
+}
+```
+</div>
+</details>
+
 Choose your favourite method to build aggregation pipelines and try to solve the following exercises.
 
 ## Most available book of the month books
