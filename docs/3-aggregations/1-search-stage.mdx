@@ -1,11 +1,11 @@
-# 👐 Construct Search queries
+# 👐 Construct Search Queries
 
 You can construct Atlas Search queries with the `$search` aggregation pipeline stage.
 
-<Link to="https://mongodb.com/docs/manual/core/aggregation-pipeline">MongoDB aggregation pipelines</Link> are multi-stage ‘assembly lines’ that reshape data and perform calculations. Pipelines can consist of one or more aggregation stages, performing different operations like match, group, sort, and output. For an exhaustive list of all available stages visit <Link to="https://mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#std-label-aggregation-pipeline-operator-reference">the complete list of pipeline operators</Link>.
+<Link to="https://mongodb.com/docs/manual/core/aggregation-pipeline">MongoDB aggregation pipelines</Link> are multi-stage "assembly lines" that reshape data and perform calculations. Pipelines can consist of one or more aggregation stages, performing different operations like match, group, sort, and output. For an exhaustive list of all available stages, visit <Link to="https://mongodb.com/docs/manual/reference/operator/aggregation-pipeline/#std-label-aggregation-pipeline-operator-reference">the complete list of pipeline operators</Link>.
 
 :::caution
-If you are not familiar with the aggregation pipelines, you should start with the [Advanced Querying With Aggregation Pipelines](https://mongodb-developer.github.io/aggregation-pipeline-lab/).
+If you are not familiar with the aggregation pipelines, you should start with [Advanced Querying With Aggregation Pipelines](https://mongodb-developer.github.io/aggregation-pipeline-lab/).
 :::
 
 In this section, we'll build an aggregation pipeline with the `$search` stage which performs full-text search using the Atlas Search index you just created.
