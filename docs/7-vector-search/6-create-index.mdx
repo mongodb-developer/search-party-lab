@@ -1,16 +1,15 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 👐 Create Vector Search indexes
+# 👐 Create Vector Search Indexes
 
-To start using Vector Search, you must configure another search index on your database. The process is similar to what you have done in the last section.
+To start using Vector Search, you must configure another search index on your database. The process is similar to what you did in the last section.
 
 ## Step-by-step guide to creating your Vector Search index
 
 Open the **Database Deployments** page in MongoDB Atlas and select **Create Index** in the lower right corner.
 
 <Screenshot src="img/screenshots/7-vector-search/6-create-index/1-create-index.png" alt="The 'Database Deployments' page with the 'Create Index' link highlighted" url="https://cloud.mongodb.com" />
-
 
 Click the **Create Search Index** button.
 
@@ -19,7 +18,6 @@ Click the **Create Search Index** button.
 This time, you will use the **JSON Editor** to create your index
 
 <Screenshot src="img/screenshots/7-vector-search/6-create-index/3-json-editor.png" alt="The 'Create Index' page with the 'JSON Editor' tab highlighted" url="https://cloud.mongodb.com" />
-
 
 Select your database and the `books` collection, change the index name to `vectorsearch`, and add the following code in the JSON editor:
 
@@ -74,5 +72,4 @@ Select your database and the `books` collection, change the index name to `vecto
   </TabItem>
 </Tabs>
 
-The final step allows you to review the index configuration and refine it if needed. Go ahead and click **Create Search Index**.
-
+The final step allows you to review the index configuration and refine it, if needed. Go ahead and click **Create Search Index**.
