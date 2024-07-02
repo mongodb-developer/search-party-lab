@@ -70,29 +70,27 @@ You can also use the `compound` operator with the `score` option to control how 
 
 ```js
 {
-    "index": "fulltextsearch",
-    "compound": {
-      "must": [
-        {
-          "text": {
-            "query": "honey",
-            "path": ["title", "author.name", "synopsis"]
-          }
+    $search: {
+        "index": "fulltextsearch",
+        "compound": {
+            "must": [{
+                "text": {
+                    "query": "honey",
+                    "path": ["title", "author.name", "synopsis"]
+                }
+            }],
+            "should": [{
+                "text": {
+                    "query": "bear",
+                    "path": "synopsis",
+                    "score": {
+                        "boost": { value: 10 }
+                    }
+                }
+            }]
         }
-      ],
-      "should": [
-        {
-          "text": {
-            "query": "bear",
-            "path": "synopsis",
-            "score": {
-              "boost": { value: 10 }
-						}
-          }
-        }
-      ]
     }
-  }
+}
 ```
 
   </div>
