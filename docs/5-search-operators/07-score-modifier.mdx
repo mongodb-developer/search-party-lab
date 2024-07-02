@@ -18,9 +18,9 @@ In our dataset, we could decide to boost results that are of the `fiction` genre
     index: 'fulltextsearch',
     text: {
       query: 'fiction',
-      path: 'genres'
-    },
-    score: { boost: { value: 2 } }
+      path: 'genres',
+      score: { boost: { value: 2 }}
+    }
   }
 }
 ```
@@ -35,9 +35,9 @@ We can also set the score to a constant value. This can be useful to demote resu
     index: 'fulltextsearch',
     equals: {
       path: 'available',
-      value: 0
-    },
-    score: { constant: { value: 0 } }
+      value: 0,
+      score: { constant: { value: 0 } }
+    }
   }
 }
 ```
