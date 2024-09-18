@@ -1,0 +1,79 @@
+# 📘 Complete Code example
+
+Here's the complete example code to implement a hybrid search against the books collection.
+
+```javascript
+db.books.aggregate([
+  // Vector search on book synopsis embeddings
+  {
+    $vectorSearch: {
+      index: "books_synopsis_vector",
+      path: "embeddings",
+      queryVector: [0.023, -0.345, 0.122, ...], // Example query vector
+      numCandidates: 100,
+      limit: 20
+    }
+  },
+  // Add vector search score
+  {
+    $set: {
+      vector_score: { $meta: "vectorSearchScore" }
+    }
+  },
+  // Combine with text search on title and author
+  {
+    $search: {
+      index: "books_text_index",
+      compound: {
+        should: [
+          {
+            text: {
+              query: "mystery novel",
+              path: "title",
+              score: { boost: { value: 3 } }
+            }
+          },
+          {
+            text: {
+              query: "mystery novel",
+              path: "authors.name",
+              score: { boost: { value: 2 } }
+            }
+          }
+        ]
+      }
+    }
+  },
+  // Add text search score
+  {
+    $set: {
+      text_score: { $meta: "searchScore" }
+    }
+  },
+  // Combine scores
+  {
+    $addFields: {
+      combined_score: {
+        $add: [
+          { $multiply: ["$vector_score", 0.6] },
+          { $multiply: ["$text_score", 0.4] }
+        ]
+      }
+    }
+  },
+  // Sort and limit results
+  { $sort: { combined_score: -1 } },
+  { $limit: 5 },
+  // Project final results
+  {
+    $project: {
+      title: 1,
+      authors: 1,
+      synopsis: 1,
+      combined_score: 1,
+      vector_score: 1,
+      text_score: 1
+    }
+  }
+])
+```

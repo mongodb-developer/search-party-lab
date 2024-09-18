@@ -1,0 +1,64 @@
+# 📘 Building the Hybrid Search Pipeline
+
+In this section, we'll construct a hybrid search pipeline that combines the power of vector search for semantic similarity with the precision of full-text search. We'll use MongoDB's aggregation framework to create this pipeline.
+
+## 3.1 Vector Search Stage
+
+The first stage of our pipeline will be the vector search. This allows us to find books with synopses that are semantically similar to our query.
+
+```javascript
+
+{
+  $vectorSearch: {
+    index: "books_synopsis_vector",
+    path: "embeddings",
+    queryVector: [0.1, -0.2, 0.3, ...], // Your query vector here
+    numCandidates: 100,
+    limit: 20
+  }
+}
+```
+
+Let's break this down:
+
+- `index`: The name of your vector index.
+- `path`: The field containing your embeddings.
+- `queryVector`: The vector representation of your search query.
+- `numCandidates`: The number of initial candidates to consider.
+- `limit`: The maximum number of results to return from this stage.
+
+## 3.2 Text Search Stage
+
+Next, we'll add a text search stage to find books based on title and author matches.
+
+```javascript
+{
+  $search: {
+    index: "books_text_index",
+    compound: {
+      should: [
+        {
+          text: {
+            query: "your search query",
+            path: "title",
+            score: { boost: { value: 3 } }
+          }
+        },
+        {
+          text: {
+            query: "your search query",
+            path: "authors.name",
+            score: { boost: { value: 2 } }
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+## Key points:
+
+- We're using a compound query with "should" clauses.
+- We search in both `title` and `authors.name` fields.
+- The `boost` values (3 for title, 2 for author) give more weight to title matches.
