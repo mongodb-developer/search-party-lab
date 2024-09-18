@@ -1,14 +1,14 @@
-# 🦸‍♂️ Pre-Filtering data 
+# 🦸‍♂️ Pre-filtering Data 
 
 :::info
-Extra activity, do it if you have extra time or are following at home, won't be covered during the hands-on Lab.
+Extra activity! Do it if you have extra time or are following along at home. It won't be covered during the hands-on lab.
 :::
 
-One of the nice things about Vector Search in Atlas is its seamless integration with the MongoDB ecosystem. For instance, to do a vector search we use an Aggregation Pipeline stage, and after searching we can project, limit our data, etc. But sometimes we want to filter _before_ running the semantic search. For that, we can use the optional `filter` property in `$vectorSearch`.
+One of the nice things about Vector Search in Atlas is its seamless integration with the MongoDB ecosystem. For instance, to do a vector search, we use an aggregation pipeline stage, and after searching, we can project, limit our data, etc. But sometimes, we want to filter _before_ running the semantic search. For that, we can use the optional `filter` property in `$vectorSearch`.
 
 ## Pre-filtering using number fields
 
-If we want to pre-filter all books that are from 2001 we can try this (but it won't work right now):
+If we want to pre-filter all books that are from 2001, we can try this (but it won't work right now):
 
 ```js
 [
@@ -42,9 +42,9 @@ We can try this and it won't work as well:
 ]
 ```
 
-The problem lies on the `vectorsearch` index, not in this code. For String fields to be pre-filtered we need to add a mapping to those fields in our Search Index definition. To do that, go to MongoDB Atlas, go to your collections and open again the Search Indexes tab, as you did while [creating the indexes](/docs/vector-search/create-index)
+The problem lies in the `vectorsearch` index, not in this code. For string fields to be pre-filtered, we need to add a mapping to those fields in our search index definition. To do that, go to MongoDB Atlas, go to your collections, and open the Search Indexes tab, as you did while [creating the indexes](/docs/vector-search/create-index).
 
-In this case, we already have our index and we're going to edit it in the JSON editor. Just change the index adding a mapping for the `year` field and `language` field. The index should look like:
+In this case, we already have our index and we're going to edit it in the JSON editor. Just change the index by adding a mapping for the `year` field and `language` field. The index should look like:
 
 ```js
 {
