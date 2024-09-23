@@ -148,7 +148,11 @@ const config = {
           height: "100%",
         },
         items: [
-          
+          {
+            label: "🤖 AI Lab Assistant",
+            href: "https://mdb.link/lab-assistant",
+            position: "right",
+          },
         ],
       },
       footer: {
