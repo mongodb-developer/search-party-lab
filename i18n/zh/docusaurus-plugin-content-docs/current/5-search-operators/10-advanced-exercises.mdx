@@ -1,0 +1,77 @@
+# 🦸 高级练习
+
+:::info
+额外活动：如果你有额外的时间或者在家里跟随这些练习做的，这些不会在动手实验中覆盖。
+:::
+
+## 提升短书优先级
+
+你注意到读者倾向于喜欢较短的书籍。在不使用`boost`进行分数提升的情况下，尝试在搜索结果中提升较短的书籍。
+
+:::tip
+即使不使用分数调整器，[`should`](https://www.mongodb.com/docs/atlas/atlas-search/compound/#mongodb-data-should)操作符仍然会提升符合条件的文档的分数。
+:::
+
+<details>
+  <summary>答案</summary>
+  <div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+    const aggregationPipeline = [
+        {
+          $search: {
+            "index": "fulltextsearch",
+            "compound": {
+              "must": [
+                {
+                  "text": {
+                    query,
+                    "path": ["title", "authors.name", "genres"],
+                    fuzzy: {
+                      maxEdits: 2
+                    }
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "equals": {
+                    "value": true,
+                    "path": "bookOfTheMonth",
+                    "score": {
+                      "boost": { value: 10 }
+                    }
+                  }
+                },
+                {
+                  "range": {
+                    path: "pages",
+                    lt: 80
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ];
+    const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+    return books;
+}
+```
+</div>
+</details>
+
+选择你最喜欢的方式来构建聚合管道，并尝试解决以下练习。
+
+## 最多可借阅的本月书籍
+
+构建一个搜索聚合语句，提升本月书籍的优先级，并首先返回具备最多可借阅副本的书籍。
+
+## 最多产的“pooh”作者
+
+找出哪位作者写了最多的“pooh”这个词，在标题或简介中出现的书籍都算。
+
+## 假设有拼写错误，但仍然找到匹配项
+
+找到与用户查询匹配的书籍，但也返回与拼写错误匹配的书籍。这些书籍应在与查询匹配的书籍之后返回。

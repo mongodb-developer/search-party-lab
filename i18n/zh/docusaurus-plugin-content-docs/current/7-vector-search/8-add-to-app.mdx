@@ -1,0 +1,65 @@
+---
+sidebar_position: 78
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 👐 将语义搜索添加到您的应用程序
+
+您现在知道了将向量搜索功能添加到应用程序所需的一切。
+
+## 配置环境变量
+
+在您的 `server/.env` [文件](https://github.com/mongodb-developer/library-management-system/blob/main/server/.env)中，您会发现一些可以用来配置应用程序的变量。在文件末尾添加几个变量，以配置嵌入源和 API 密钥。
+
+```json
+EMBEDDINGS_SOURCE=serverlessEndpoint
+EMBEDDING_KEY=<API Key>
+```
+
+:::tip
+您的导师将为您提供一个 API 密钥，您可以在参加的活动中使用。将其设置在 `EMBEDDING_KEY` 变量中。
+:::
+
+## 配置向量搜索查询
+
+再次打开 `server/src/controllers/books.ts` [文件](https://github.com/mongodb-developer/library-management-system/blob/main/server/src/controllers/books.ts)，并编辑 `searchBooks` 方法，以查询您的语义搜索数据。
+
+:::tip
+使用 `getEmbeddings` 函数将查询转换为向量。
+:::
+
+<details>
+<summary>答案</summary>
+<div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+  const vector = await getEmbeddings(query);
+  const aggregationPipeline = [
+    {
+      $vectorSearch: {
+        queryVector:  vector,
+        path: 'embeddings',
+        numCandidates: 100,
+        index: 'vectorsearch',
+        limit: 100,
+      }
+    }
+  ];
+  const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+  return books;
+}
+```
+</div>
+</details>
+
+## 测试语义搜索
+
+要在应用程序中测试语义搜索，请尝试搜索一些书籍，但使用不同的词语，这些词语具有相似的含义或与书籍封面相关。
+
+您可以使用以下短语进行查询：
+- 狗狗做事情
+- 毛绒绒的动物
+- 欧洲历史

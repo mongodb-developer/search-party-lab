@@ -1,0 +1,78 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Full Text Search": {
+    "message": "全文搜索",
+    "description": "The label for category Full Text Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Full Text Search.link.generated-index.description": {
+    "message": "In this section, you'll learn what is full-text search, and why you should use it.",
+    "description": "The generated-index page description for category Full Text Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Start Searching": {
+    "message": "Start Searching",
+    "description": "The label for category Start Searching in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Start Searching.link.generated-index.description": {
+    "message": "In this section, you will learn how to create a search index, and how to search your first book.",
+    "description": "The generated-index page description for category Start Searching in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Aggregation pipelines": {
+    "message": "Aggregation pipelines",
+    "description": "The label for category Aggregation pipelines in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Aggregation pipelines.link.generated-index.description": {
+    "message": "In this section, you will  learn how to query your data using MongoDB's query language.",
+    "description": "The generated-index page description for category Aggregation pipelines in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Implementing Atlas Search": {
+    "message": "Implementing Atlas Search",
+    "description": "The label for category Implementing Atlas Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Implementing Atlas Search.link.generated-index.description": {
+    "message": "In this section, you'll learn how add full text search capabilities to your application.",
+    "description": "The generated-index page description for category Implementing Atlas Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Search Operators": {
+    "message": "Search Operators",
+    "description": "The label for category Search Operators in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Search Operators.link.generated-index.description": {
+    "message": "In this section, you'll learn about the different search operators.",
+    "description": "The generated-index page description for category Search Operators in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Faceting": {
+    "message": "Faceting",
+    "description": "The label for category Faceting in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Faceting.link.generated-index.description": {
+    "message": "In this section, you'll learn about faceting with MongoDB Atlas Search.",
+    "description": "The generated-index page description for category Faceting in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Vector Search": {
+    "message": "Vector Search",
+    "description": "The label for category Vector Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Vector Search.link.generated-index.description": {
+    "message": "In this section, you'll learn how to create vector search indexes with Atlas Search.",
+    "description": "The generated-index page description for category Vector Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.🏡 Create Vectors": {
+    "message": "🏡 Create Vectors",
+    "description": "The label for category 🏡 Create Vectors in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.🏡 Create Vectors.link.generated-index.description": {
+    "message": "This is a take-home activity. Do it if you're following at home. In this section, you'll learn how to create embeddings from various providers.",
+    "description": "The generated-index page description for category 🏡 Create Vectors in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Hybrid Search": {
+    "message": "Hybrid Search",
+    "description": "The label for category Hybrid Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Hybrid Search.link.generated-index.description": {
+    "message": "In this section, you'll learn how to leverage a hybrid approach to search indexes with Atlas Vector Search and Atlas Search.",
+    "description": "The generated-index page description for category Hybrid Search in sidebar tutorialSidebar"
+  }
+}

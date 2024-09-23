@@ -1,0 +1,21 @@
+# 📘 `range` 操作符
+
+`range` 操作符类似于 `equals`，但适用于值的范围。
+
+`range` 操作符的语法如下。您可以在[文档](https://www.mongodb.com/docs/atlas/atlas-search/range/)中找到更多解释。
+
+```
+{
+   "$search": {
+      "index": <index name>, // 可选，默认为 "default"
+      "range": {
+         "path": "<field-to-search>",
+         "gt | gte": <value-to-search>,
+         "lt | lte": <value-to-search>,
+         "score": <score-options>
+      }
+   }
+}
+```
+
+如果您只想查询页数在一定范围内的书籍，这将非常有用。例如，如果您只想要 100 到 300 页之间的书籍，您可以使用 `range` 操作符来优化结果。

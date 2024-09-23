@@ -1,0 +1,67 @@
+# 👐 测试搜索索引
+
+现在你有了一个搜索索引，你可以测试一下。
+
+从索引列表中，寻找 **QUERY** 按钮。
+
+<Screenshot src="img/screenshots/2-search/3-test-search/1-query-button.png" alt="索引列表中的查询按钮" url="https://cloud.mongodb.com" />
+
+## 搜索测试器
+
+使用上面的 **QUERY** 按钮，你将打开 **搜索测试器**。在字段中输入单词：
+
+```
+cooking
+```
+
+然后查看你得到的结果。
+
+<Screenshot src="img/screenshots/2-search/3-test-search/2-search-tester.png" alt="搜索测试器" url="https://cloud.mongodb.com" />
+
+你可以看到你搜索到了一系列书籍，包括：
+* Pennsylvania Dutch _Cooking_: A Mennonite Community Cookbook
+* Semi-Homemade _Cooking_: Quick, Marvelous Meals and Nothing is Made from…
+* Cookin' Cajun _Cooking_ School Cookbook - Creole and Cajun Cuisine from …
+
+所有这些结果都匹配了单词 _cooking_。请注意，大小写并不重要，单词在标题中的位置也不重要。搜索索引足够智能，能够在所有这些标题中找到单词 _cooking_。
+
+现在，你已经为你的用户提供了更好的搜索体验。
+
+## 仅搜索标题
+
+这很棒。然而，这个搜索查询正在搜索整个文档。在某些情况下，这可能对你有用，但在大多数情况下，你可能只想限制搜索到相关的字段。在这种情况下，让我们将其更改为仅搜索标题。
+
+在 **搜索测试器** 中，点击绿色 **Search** 按钮旁边的 **编辑 $search 查询** 按钮。
+
+这将打开查询编辑器。
+
+<Screenshot src="img/screenshots/2-search/3-test-search/3-query-editor.png" alt="编辑 $search 查询按钮" url="https://cloud.mongodb.com" />
+
+请注意，`path` 属性目前显示为 `*`。这意味着它将搜索整个文档。尝试将搜索更改为仅搜索 `title` 字段。
+
+:::tip
+你可以在 [搜索文档](https://www.mongodb.com/docs/atlas/atlas-search/path-construction/) 中找到更多关于如何构建查询路径的信息。
+:::
+
+<details>
+  <summary>点击这里查看答案</summary>
+  <div>
+
+```
+[
+  {
+    $search: {
+      index: "fulltextsearch",
+      text: {
+        query: "cooking",
+        path: ["title"]
+      }
+    }
+  }
+]
+```
+
+</div>
+</details>
+
+你会看到相同的结果，但顺序不同。这与相关性有关，但我们将在后面的章节中讨论。

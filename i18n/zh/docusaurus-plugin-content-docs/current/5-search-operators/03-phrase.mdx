@@ -1,0 +1,24 @@
+# 📘 `phrase` 操作符
+
+`phrase` 操作符用于按特定顺序搜索一组单词。它类似于 `match` 操作符，但它会匹配文本中的任何位置，而不仅仅是开头。
+
+`phrase` 操作符的定义如下。您可以在[官方文档](https://www.mongodb.com/docs/atlas/atlas-search/phrase/)中找到更多关于 `phrase` 操作符的详细信息。
+
+```
+{
+  $search: {
+     "index": <index name>, // 可选，默认为 "default"
+     "phrase": {
+       "query": "<search-string>",
+       "path": "<field-to-search>",
+       "score": <options>,
+       "slop": <distance-number>
+     }
+  }
+}
+```
+其用法与使用 `text` 操作符的方式非常相似。
+
+## `slop` 属性
+
+`slop` 属性用于指定短语中的单词可以相隔多远。默认值是 `0`，这意味着单词必须按查询中指定的确切顺序排列。如果将值设置为 `1`，则单词之间可以相隔一个单词，依此类推。

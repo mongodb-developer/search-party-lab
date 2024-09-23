@@ -1,0 +1,38 @@
+---
+sidebar_position: 74
+---
+
+# 👐 导入向量化数据
+
+在本次研讨会中，您可能没有足够的时间[向量化数据](/docs/category/-create-vectors)。因此，我们提供了一个向量化版本的数据供您使用。
+
+数据已使用各种提供者进行预编码，因此您可以使用您最熟悉的提供者。
+
+请记住，您的查询需要使用与数据相同的提供者进行编码。
+
+每个数据集使用的模型如下所示：
+
+| 数据集 | 模型 | 文档 |
+| -------- | ----- | ------------- |
+| Google Cloud Vertex AI | multimodalembedding@001 | [文档](https://cloud.google.com/vertex-ai/docs/generative-ai/embeddings/get-multimodal-embeddings) |
+| OpenAI | text-embedding-ada-002 | [文档](https://platform.openai.com/docs/guides/embeddings) |
+
+## 导入嵌入
+
+要导入具有预创建嵌入的数据集，您可以使用之前使用的[导入工具](https://mdb.link/import-library-data)。
+
+在顶部的文本框中输入您的连接字符串，并从屏幕底部的下拉菜单中选择您的提供者。
+
+<Screenshot src="/img/screenshots/7-vector-search/4-import-data/1-import.png" url="https://mdb.link/import-library-data" />
+
+:::tip
+如果不确定，或者不想创建自己的嵌入，您可以使用`无服务器端点`提供者。
+:::
+
+选择提供者后，点击`添加嵌入`按钮。
+
+:::warning
+此过程将删除您现有的`books`集合，并以新集合替换。任何现有的索引或对集合的更改将丢失。
+:::
+
+导入完成后，您会看到确认消息。

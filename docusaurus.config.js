@@ -100,12 +100,12 @@ const config = {
   staticDirectories: ["static"],
   i18n: {
     defaultLocale: "en",
-    locales: ["en"],
+    locales: ["en", "zh"],
   },
   customFields: {
     startButtonTitle: `${startButtonTitle}`,
     featureList: featureList,
-    utmParams
+    utmParams,
   },
   presets: [
     [
@@ -126,7 +126,10 @@ const config = {
       }),
     ],
   ],
-  plugins: [require.resolve("docusaurus-lunr-search")],
+  plugins: [[require.resolve("docusaurus-lunr-search"), {
+      languages: ['en', 'zh'] // language codes
+    }]
+  ],
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -151,6 +154,10 @@ const config = {
           {
             label: "🤖 AI Lab Assistant",
             href: "https://mdb.link/lab-assistant",
+            position: "right",
+          },
+          {
+            type: "localeDropdown",
             position: "right",
           },
         ],
