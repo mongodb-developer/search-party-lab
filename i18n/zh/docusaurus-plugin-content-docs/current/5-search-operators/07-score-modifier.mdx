@@ -1,0 +1,43 @@
+# 📘 评分修饰符
+
+在您迄今为止看到的操作符中，您可以调整 `score` 属性来修改结果的评分。这对于根据某些标准提升或贬低结果非常有用。
+
+有多种方法可以修改评分。您可以查看[文档](https://www.mongodb.com/docs/atlas/atlas-search/score/modify-score/)以了解更多信息。
+
+在这里，我们将重点介绍一些简单的方法。
+
+## 提升 (Boost)
+
+使用 `boost`，您可以将评分乘以某个值。这对于提升某些结果的分数非常有用。较高的提升等级会得到更高的修饰符。
+
+在我们的数据集中，我们可以决定提升属于 `fiction` 类型的结果。
+
+```
+{
+  $search: {
+    index: 'fulltextsearch',
+    text: {
+      query: 'fiction',
+      path: 'genres'
+    },
+    score: { boost: { value: 2 } }
+  }
+}
+```
+
+## 常量 (Constant)
+
+我们也可以将评分设置为一个常量值。这对于贬低不够相关的结果非常有用。在我们的用例中，我们可以为当前不可用的书籍设置一个常量值 0。
+
+```
+{
+  $search: {
+    index: 'fulltextsearch',
+    equals: {
+      path: 'available',
+      value: 0
+    },
+    score: { constant: { value: 0 } }
+  }
+}
+```

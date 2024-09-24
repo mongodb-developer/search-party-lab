@@ -1,0 +1,99 @@
+# 📘 混合和匹配
+
+使用这些操作符的全部价值在于将它们组合起来，以创建对用户更相关的搜索结果。
+
+使用 `compound` 操作符，您可以混合和匹配刚才看到的一些操作符。`compound` 操作符的语法如下：
+
+```
+{
+  $search: {
+    "index": <index name>, // 可选，默认为 "default"
+    "compound": {
+      <must | mustNot | should | filter>: [ { <clauses> } ],
+      "score": <options>
+    }
+  }
+}
+```
+
+`must`
+必须匹配的子句，文档才能包含在结果中。返回的评分是子句中所有子查询的评分之和。
+
+映射到 AND 布尔操作符。
+
+`mustNot`
+不得匹配的子句，文档才能包含在结果中。mustNot 子句不会影响返回文档的评分。
+
+映射到 AND NOT 布尔操作符。
+
+`should`
+希望在结果中包含的文档中匹配的子句。包含 should 子句匹配的文档比不包含 should 子句的文档得分更高。返回的评分是子句中所有子查询的评分之和。
+
+假设您想要搜索标题中包含 "cats" 的书，但您更喜欢较短的书，您可以使用以下查询：
+
+```
+{
+  $search: {
+    "index": "fulltextsearch",
+    "compound": {
+      "must": [
+        {
+          "text": {
+            "query": "cats",
+            "path": "title"
+          }
+        }
+      ],
+      "should": [
+        {
+          "range": {
+            "path": "pages",
+            "gt": 0,
+            "lt": 100
+          }
+        }
+      ]
+    }
+  }
+}
+```
+
+这将返回所有标题中包含 "cats" 的书，但会优先显示较短的书。它仍然会返回较长的书，但它们的得分会低于较短的书。
+
+## 使用评分的复合查询
+
+您还可以使用 `compound` 操作符和 `score` 选项来控制子查询评分的组合方式。假设图书馆有一个月度主题，他们希望推广在简介中包含特定词的书籍。本月的主题是 "bears"。试着写一个搜索查询，将用户查询的书籍返回，但包含 "bear" 一词的书籍评分更高，并排在前面。试着让一本关于 Winnie the Pooh 的书在用户搜索 "honey" 时排在第一位。
+
+<details>
+  <summary>点击查看答案</summary>
+  <div>
+
+```
+{
+    "index": "fulltextsearch",
+    "compound": {
+      "must": [
+        {
+          "text": {
+            "query": "honey",
+            "path": ["title", "author.name", "synopsis"]
+          }
+        }
+      ],
+      "should": [
+        {
+          "text": {
+            "query": "bear",
+            "path": "synopsis",
+            "score": {
+              "boost": { value: 10 }
+            }
+          }
+        }
+      ]
+    }
+  }
+```
+
+  </div>
+</details>

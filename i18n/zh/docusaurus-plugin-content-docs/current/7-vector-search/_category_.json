@@ -1,0 +1,8 @@
+{
+    "label": "向量搜索",
+    "position": 70,
+    "link": {
+        "type": "generated-index",
+        "description": "在本节中，您将学习如何使用 Atlas Search 创建向量搜索索引。"
+    }
+}

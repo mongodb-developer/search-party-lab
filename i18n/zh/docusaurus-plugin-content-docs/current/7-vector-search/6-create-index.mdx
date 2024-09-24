@@ -1,0 +1,79 @@
+---
+sidebar_position: 76
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 👐 创建向量搜索索引
+
+要开始使用向量搜索，你必须在数据库上配置另一个搜索索引。这个过程与上一节中所做的类似。
+
+## 创建向量搜索索引的分步指南
+
+打开 MongoDB Atlas 中的 **Database Deployments** 页面，并在右下角选择 **Create Index**。
+
+<Screenshot src="img/screenshots/7-vector-search/6-create-index/1-create-index.png" alt="在 'Database Deployments' 页面中突出显示的 'Create Index' 链接" url="https://cloud.mongodb.com" />
+
+点击 **Create Search Index** 按钮。
+
+<Screenshot src="img/screenshots/7-vector-search/6-create-index/2-create-search-index.png" alt="在 'Create Index' 页面中突出显示的 'Create Search Index' 按钮" url="https://cloud.mongodb.com" />
+
+这次，你将使用 **JSON Editor** 来创建索引。
+
+<Screenshot src="img/screenshots/7-vector-search/6-create-index/3-json-editor.png" alt="在 'Create Index' 页面中突出显示的 'JSON Editor' 标签" url="https://cloud.mongodb.com" />
+
+选择你的数据库和 `books` 集合，将索引名称更改为 `vectorsearch`，并在 JSON 编辑器中添加以下代码：
+
+<Tabs groupId="aiproviders">
+  <TabItem value="serverless" label="Serverless Endpoint" default>
+
+```js
+{
+  "fields":[
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 1408,
+      "similarity": "cosine"
+    }
+  ]
+}
+```
+
+  </TabItem>
+  <TabItem value="openai" label="OpenAI" default>
+
+```js
+{
+  "fields":[
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 1536,
+      "similarity": "cosine"
+    }
+  ]
+}
+```
+
+  </TabItem>
+  <TabItem value="googleVertex" label="Google Cloud Vertex AI">
+
+```js
+{
+  "fields":[
+    {
+      "type": "vector",
+      "path": "embeddings",
+      "numDimensions": 1408,
+      "similarity": "cosine"
+    }
+  ]
+}
+```
+
+  </TabItem>
+</Tabs>
+
+最后一步允许你查看索引配置并在需要时进行优化。继续点击 **Create Search Index**。
