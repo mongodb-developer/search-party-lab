@@ -1,4 +1,40 @@
 {
+  "homepage.title": {
+    "message": "创建引人入胜的搜索体验",
+    "description": "The title of the home page"
+  },
+  "homepage.subtitle": {
+    "message": "由 MongoDB 提供实验环境，帮助您使用 MongoDB Atlas Search 构建搜索功能",
+    "description": "The subtitle of the home page"
+  },
+  "homepage.startButtonTitle": {
+    "message": "进入搜索实验",
+    "description": "The button of the home page"
+  },
+  "homepage.featureList.0.title": {
+    "message": "动手实验",
+    "description": "The feature of the home page"
+  },
+  "homepage.featureList.0.description": {
+    "message": "通过实践学习，而不是通过阅读学习。",
+    "description": "The feature of the home page"
+  },
+  "homepage.featureList.1.title": {
+    "message": "优秀的导师",
+    "description": "The feature of the home page"
+  },
+  "homepage.featureList.1.description": {
+    "message": "在我们优秀的导师帮助下构建，或者自己动手完成。",
+    "description": "The feature of the home page"
+  },
+  "homepage.featureList.2.title": {
+    "message": "带回家的资料",
+    "description": "The feature of the home page"
+  },
+  "homepage.featureList.2.description": {
+    "message": "带回这份资料，继续学习。",
+    "description": "The feature of the home page"
+  },
   "theme.ErrorPageContent.title": {
     "message": "页面已崩溃。",
     "description": "The title of the fallback page when the page crashed"
