@@ -1,3 +1,5 @@
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 # 👐 Testing the Search index
 
 Now that you have a search index, you can test it out.
@@ -17,6 +19,11 @@ cooking
 and look at the results you get.
 
 <Screenshot src="img/screenshots/2-search/3-test-search/2-search-tester.png" alt="The Search Tester" url="https://cloud.mongodb.com" />
+
+:::info
+Some of the fields in the documents (like `title`) may be hidden. You can expand a document to see all of its fields by clicking the arrow button on the right side of the document.
+<img src={useBaseUrl("img/screenshots/2-search/3-test-search/4-expand-document.png")} alt="The expand document button" />
+:::
 
 You can see that you get a list of books back including:
 * Pennsylvania Dutch _Cooking_: A Mennonite Community Cookbook
