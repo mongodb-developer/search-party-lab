@@ -1,12 +1,12 @@
-# 👐 Add full-text search to your application
+# 👐 Add Full-text Search to Your Application
 
-So far, you've seen how to use the search indexes in the aggregation pipeline builder, or in Compass. But what if you want to use the search index in your application?
+So far, you've seen how to use the search indexes in the aggregation pipeline builder or Compass. But what if you want to use the search index in your application?
 
 To do so, you will need to add some code to your application.
 
 ## Using aggregation pipelines in Node.js
 
-To use the aggregation pipeline in Node.js, you will need to use the `aggregate` method on the collection object. This method takes an array of stages as an argument, and returns a cursor. You can then use the cursor to iterate over the results, or use the `toArray` method to get the results in an array.
+To use the aggregation pipeline in Node.js, you will need to use the `aggregate` method on the collection object. This method takes an array of stages as an argument and returns a cursor. You can then use the cursor to iterate over the results or use the `toArray` method to get the results in an array.
 
 ```js
 const documents = await collection.aggregate(aggregationPipelines).toArray();
@@ -26,7 +26,7 @@ public async searchBooks(query: string): Promise<Book[]> {
   return books;
 }
 ```
-While this code works to a certain extent, it is less than optimal. As the dataset grows, the performance of this query will degrade because it will have to scan the entire collection. You cannot query the index with a regular expression. Furthermore, the query only matches on the title, and only for the exact sequence of characters.
+While this code works to a certain extent, it is less than optimal. As the dataset grows, the performance of this query will degrade because it will have to scan the entire collection. You cannot query the index with a regular expression. Furthermore, the query only matches on the title and only for the exact sequence of characters.
 
 Change this code to use the search index instead. You will need to use the `$search` stage in the aggregation pipeline. Have your search cover the title, the author name, and the genres array.
 
@@ -56,4 +56,4 @@ public async searchBooks(query: string): Promise<Book[]> {
 </div>
 </details>
 
-Play around the application, and look at what are the results you're getting. You should see that the results are more relevant than before.
+Play around the application, and look at the results you're getting. You should see that the results are more relevant than before.

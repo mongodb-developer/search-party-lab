@@ -1,0 +1,63 @@
+# 📘 评分
+
+您可能已经注意到，大多数操作符都有一个 `score` 属性，但我们还没有真正讨论过它。
+
+在深入了解评分之前，重要的是要理解文档评分是什么。每个由 Atlas Search 查询返回的文档都会根据相关性分配一个评分，并且结果集中包含的文档会按从高到低的评分顺序返回。
+
+一些可以影响评分的因素包括：
+* 搜索词在文档中的位置，
+* 搜索词在文档中出现的频率，
+* 查询使用的操作符类型，
+* 查询使用的分析器类型。
+
+要查看评分，您需要使用 `$meta` 投影一个新的元数据字段。要在简单的短语搜索 _Alice in Wonderland_ 中查看文档评分，请尝试以下聚合管道。
+
+您可以在 Atlas UI 或 Compass 的聚合构建器中运行此代码。
+
+```
+[
+  {
+    $search: {
+      index: "fulltextsearch",
+      phrase: {
+        query: "Alice in Wonderland",
+        path: "title",
+      },
+    },
+  },
+  {
+    $project: {
+      title: 1,
+      authors: 1,
+      pages: 1,
+      year: 1,
+      score: {
+        $meta: "searchScore",
+      },
+    },
+  },
+]
+```
+
+您的第一个结果应该是
+```
+{
+  "_id": "0831702877",
+  "title": "Alice in Wonderland",
+  "authors": [
+    {
+      "_id": "64cc2db4830ba29148da7bbc",
+      "name": "Walt Disney Productions"
+    },
+    {
+      "_id": "64cc2db4830ba29148da8db5",
+      "name": "Mouse Works"
+    }
+  ],
+  "pages": 95,
+  "year": 1997,
+  "score": 10.441896438598633
+}
+```
+
+它得分比下一个高得多，因为它是一个完全匹配。

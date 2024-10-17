@@ -1,0 +1,8 @@
+{
+  "label": "开始搜索",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "在本节中，你将学习如何创建搜索索引，以及如何搜索你的第一本书。"
+  }
+}

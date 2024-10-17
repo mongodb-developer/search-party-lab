@@ -5,12 +5,12 @@ You might have noticed that most of the operators have a `score` property, which
 Before we jump into scoring, it is important to understand what the document score is. Every document returned by an Atlas Search query is assigned a score based on relevance, and the documents included in a result set are returned in order from highest score to lowest.
 
 Some factors that can influence the score include:
-* The position of the search term in the document,
-* The frequency of occurrence of the search term in the document,
-* The type of operator the query uses,
+* The position of the search term in the document.
+* The frequency of occurrence of the search term in the document.
+* The type of operator the query uses.
 * The type of analyzer the query uses.
 
-To see the scores, you will need to project a new metadata field, using `$meta`. To see the document scores in a simple phrase search for _Alice in Wonderland_, try the followin aggregation pipeline.
+To see the scores, you will need to project a new metadata field, using `$meta`. To see the document scores in a simple phrase search for _Alice in Wonderland_, try the following aggregation pipeline.
 
 You can run this in the aggregation builders from the Atlas UI or in Compass.
 
@@ -39,7 +39,7 @@ You can run this in the aggregation builders from the Atlas UI or in Compass.
 ]
 ```
 
-Your first result should look be
+Your first result should look like this:
 
 ```
 {

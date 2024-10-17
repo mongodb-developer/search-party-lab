@@ -1,7 +1,7 @@
 # Using OpenAI
 
 :::info
-Take-home activity, do it if you are following at home, won't be covered during the hands-on Lab.
+Take-home activity! Do it if you are following along at home. It won't be covered during the hands-on lab.
 :::
 
 OpenAI is a company that develops AI models for natural language processing. They offer a free API that you can use to create embeddings for your documents. The API is called [OpenAI's Embedding API](https://platform.openai.com/docs/api-reference/embeddings).
@@ -10,7 +10,7 @@ To get some embeddings using their API, you need to create an account and get an
 
 ## Create an OpenAI account and get an API key
 
-To create an account, go to [https://openai.com/](http://openai.com/) and click on the "Log In" button in the upper right corner. This will redirect you to the login page, where you'll have the option to sign up for their services.
+To create an account, go to [https://openai.com/](http://openai.com/) and click on the **Log In** button in the upper right corner. This will redirect you to the login page, where you'll have the option to sign up for their services.
 
 <Screenshot src="img/screenshots/7-vector-search/5-create-vectors/3-openai/1-signup.png" url="https://openai.com/" alt="The OpenAI signup page" />
 
@@ -22,7 +22,7 @@ From there, click on the **Create new secret key** button.
 
 <Screenshot src="img/screenshots/7-vector-search/5-create-vectors/3-openai/2-create-key.png" url="https://platform.openai.com/account/api-keys" alt="The OpenAI API keys page" />
 
-You'll be prompted to give your key a name. You can call it "MongoDB Vector Search Demo". Then click on the **Create secret key** button.
+You'll be prompted to give your key a name. You can call it "MongoDB Vector Search Demo." Click on the **Create secret key** button.
 
 You will then be presented with your API key. Copy it and save it somewhere safe.
 
@@ -53,9 +53,9 @@ You can find more information about the API in the [OpenAI documentation](https:
 
 ## Create embeddings for the books
 
-To create the embeddings for the books in your collection, you should run this curl command, or use the Node.js library, for each book. This process is somewhat time consuming, so we've already created them for you.
+To create the embeddings for the books in your collection, you should run this curl command, or use the Node.js library, for each book. This process is somewhat time-consuming, so we've already created them for you.
 
-You can find the 1586 dimensions vector in `embeddings` field of the books.
+You can find the 1586 dimensions vector in the `embeddings` field of the books.
 
 Because we already have the vectors for the books, we can use them with Vector Search.
 
@@ -63,7 +63,7 @@ Because we already have the vectors for the books, we can use them with Vector S
 
 To query the data, Vector Search will need to calculate the distance between the query vector and the vectors of the documents in the collection.
 
-To do so, you will need to vectorize your query. You can use the same function to vectorize your query as well.
+To do so, you will need to vectorize your query. You can use the same function to vectorize your query, as well.
 
 In the library application, we've created a function that will vectorize your query for you. You can find it in the `server/src/embeddings/openai.ts` file.
 
@@ -94,12 +94,9 @@ In your `server/.env` file, you'll find a few variables that you can use to conf
 
 The first one is `EMBEDDINGS_SOURCE`. It tells the application where to get the embeddings from. You can set it to `openai`.
 
-Now that you have an OpenAI API key, you can then set the `EMBEDDING_KEY` variable to your API key.
+Now that you have an OpenAI API key, you can set the `EMBEDDING_KEY` variable to your API key.
 
 ```
 EMBEDDINGS_SOURCE=openai
 EMBEDDING_KEY=sk-...
 ```
-
-
-

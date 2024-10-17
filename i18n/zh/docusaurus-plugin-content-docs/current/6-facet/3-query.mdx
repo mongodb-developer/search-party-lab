@@ -1,0 +1,37 @@
+# 🦸 使用分面查询
+
+现在你的索引已经到位，你可以使用它进行查询了。
+
+你需要使用 `$searchMeta` 聚合阶段来查询你的数据。你可以在 <Link to="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-searchMeta">Atlas Search 文档</Link> 中找到更多关于这个阶段及其使用方法的信息。
+
+现在你已经在 `genres` 和 `year` 字段上创建了索引，尝试创建一个查询，返回2000年代出版的每个类型的书籍数量。
+
+<details>
+  <summary>点击查看答案</summary>
+  <div>
+
+```js
+{
+  $searchMeta: {
+    "index": "facetsIndexName",
+    "facet": {
+      "operator": {
+        "range": {
+          "path": "year",
+          "gte": 2000,
+          "lte": 2010
+        }
+      },
+      "facets": {
+        "genresFacet": {
+          "type": "string",
+          "path": "genres"
+        }
+      }
+    }
+  }
+}
+```
+
+  </div>
+</details>

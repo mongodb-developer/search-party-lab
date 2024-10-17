@@ -1,0 +1,14 @@
+{
+  "title": {
+    "message": "创建引人入胜的搜索体验",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "MongoDB Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.🤖 AI Lab Assistant": {
+    "message": "🤖 AI Lab Assistant",
+    "description": "Navbar item with label 🤖 AI Lab Assistant"
+  }
+}

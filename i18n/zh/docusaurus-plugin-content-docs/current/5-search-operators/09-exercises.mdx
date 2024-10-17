@@ -1,0 +1,94 @@
+# 👐 练习
+
+现在是练习你所学概念的时候了！尝试尽你所能回答以下问题。可以参考你在课程中查看的幻灯片和记录的笔记。
+
+不要作弊！尽量在尝试回答后再查看答案。
+
+## 添加模糊搜索
+
+尝试在你的应用中添加模糊搜索功能，以便即使用户输入有拼写错误也能找到正确的书籍。
+
+:::tip
+还记得 [`text`](https://www.mongodb.com/docs/atlas/atlas-search/text/#std-label-text-ref) 操作符的 `fuzzy` 参数吗？就是在这里使用它。
+:::
+
+<details>
+  <summary>答案</summary>
+  <div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+  const aggregationPipeline = [
+      {
+          $search: {
+              index: 'fulltextsearch',
+              text: {
+                  query,
+                  path: ['title', 'authors.name', 'genres'],
+                  fuzzy: {
+                    maxEdits: 2
+                  }
+              }
+          }
+      }
+  ];
+  const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+  return books;
+}
+```
+
+  </div>
+</details>
+
+## 推广月度推荐书籍
+
+市场团队决定要推广月度推荐书籍。他们希望在搜索结果中首先显示这些书籍。你会怎么做呢？
+
+:::tip
+你需要在这里使用 [`compound`](https://www.mongodb.com/docs/atlas/atlas-search/compound/#std-label-compound-ref) 操作符和多个操作符。你可以使用一些书籍上的 `bookOfTheMonth` 布尔字段。
+:::
+
+<details>
+  <summary>答案</summary>
+  <div>
+
+```js
+public async searchBooks(query: string): Promise<Book[]> {
+    const aggregationPipeline = [
+        {
+          $search: {
+            "index": "fulltextsearch",
+            "compound": {
+              "must": [
+                {
+                  "text": {
+                    query,
+                    "path": ["title", "authors.name", "genres"],
+                    fuzzy: {
+                      maxEdits: 2
+                    }
+                  }
+                }
+              ],
+              "should": [
+                {
+                  "equals": {
+                    "value": true,
+                    "path": "bookOfTheMonth",
+                    "score": {
+                      "boost": { value: 10 }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ];
+    const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+    return books;
+}
+```
+
+  </div>
+</details>
