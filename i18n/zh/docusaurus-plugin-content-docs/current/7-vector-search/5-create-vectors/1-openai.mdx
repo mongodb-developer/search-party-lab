@@ -1,0 +1,97 @@
+# 使用 OpenAI
+
+:::info
+家庭作业活动，如果您在家中自行完成，请执行此操作，不会在动手实验中覆盖。
+:::
+
+OpenAI 是一家开发自然语言处理 AI 模型的公司。他们提供了一个免费的 API，您可以使用它为文档创建嵌入。该 API 称为 [OpenAI 的嵌入 API](https://platform.openai.com/docs/api-reference/embeddings)。
+
+要使用他们的 API 获取一些嵌入，您需要创建一个账户并获取一个 API 密钥。
+
+## 创建 OpenAI 账户并获取 API 密钥
+
+要创建账户，请访问 [https://openai.com/](http://openai.com/) 并点击右上角的“登录”按钮。这将重定向您到登录页面，您可以选择注册他们的服务。
+
+<Screenshot src="img/screenshots/7-vector-search/5-create-vectors/3-openai/1-signup.png" url="https://openai.com/" alt="OpenAI 注册页面" />
+
+按照屏幕上的说明操作，并验证您的电子邮件地址。
+
+一旦您有了账户，就可以转到 [API 密钥页面](https://platform.openai.com/account/api-keys) 获取 API 密钥。
+
+在那里，点击 **创建新密钥** 按钮。
+
+<Screenshot src="img/screenshots/7-vector-search/5-create-vectors/3-openai/2-create-key.png" url="https://platform.openai.com/account/api-keys" alt="OpenAI API 密钥页面" />
+
+您将被提示给您的密钥命名。您可以将其称为“MongoDB 向量搜索演示”。然后点击 **创建密钥** 按钮。
+
+然后会显示您的 API 密钥。复制它并保存在安全的地方。
+
+<Screenshot src="img/screenshots/7-vector-search/5-create-vectors/3-openai/3-api-key.png" url="https://platform.openai.com/account/api-keys" alt="OpenAI API 密钥" />
+
+:::caution
+请确保您将此密钥复制到某个地方以便稍后使用，之后您将无法再次看到它。
+:::
+
+现在您有了 API 密钥，可以用它为您的文档创建嵌入。
+
+## 为文档创建嵌入
+
+要通过发送 curl 命令到 OpenAI API 为您的文档创建嵌入，您可以使用以下命令。
+
+```bash
+OPENAI_API_KEY=<YOUR_API_KEY>
+curl https://api.openai.com/v1/embeddings \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "input": "The food was delicious and the waiter...",
+    "model": "text-embedding-ada-002"
+  }'
+```
+
+您可以在 [OpenAI 文档](https://platform.openai.com/docs/api-reference/embeddings) 中找到有关该 API 的更多信息。
+
+## 为书籍创建嵌入
+
+要为您的集合中的书籍创建嵌入，您应该为每本书运行此 curl 命令，或使用 Node.js 库。这个过程有点耗时，所以我们已经为您创建了它们。
+
+您可以在书籍的 `embeddings` 字段中找到 1586 维度的向量。
+
+因为我们已经有了书籍的向量，所以我们可以用它们进行向量搜索。
+
+## 使用向量进行查询
+
+要查询数据，向量搜索需要计算查询向量与集合中文档向量之间的距离。
+
+为此，您需要向量化您的查询。您可以使用相同的函数来向量化您的查询。
+
+在图书馆应用程序中，我们创建了一个函数来为您向量化查询。您可以在 `server/src/embeddings/openai.ts` 文件中找到它。
+
+```js
+import OpenAI from 'openai';
+
+const { EMBEDDING_KEY } = process.env;
+
+let openai;
+
+const getTermEmbeddings = async (text) => {
+    if (!openai) {
+        openai = new OpenAI({apiKey: EMBEDDING_KEY});
+    }
+    const embeddings = await openai.embeddings.create({
+        model: 'text-embedding-ada-002',
+        input: text,
+    });
+    return embeddings?.data[0]?.embedding;
+};
+
+export default getTermEmbeddings;
+```
+
+## 配置应用程序
+
+在 `server/.env` 文件中，您会找到一些变量，可以用来配置应用程序。
+
+第一个是 `EMBEDDINGS_SOURCE`。它告诉应用程序从哪里获取嵌入。您可以将其设置为 `openai`。
+
+现在您有了 OpenAI API 密钥，可以将

@@ -1,0 +1,59 @@
+# 👐 为您的应用程序添加全文搜索
+
+到目前为止，您已经了解了如何在聚合管道构建器或 Compass 中使用搜索索引。但是，如果您想在应用程序中使用搜索索引，该怎么办呢？
+
+为此，您需要向应用程序添加一些代码。
+
+## 在 Node.js 中使用聚合管道
+
+要在 Node.js 中使用聚合管道，您需要在集合对象上使用 `aggregate` 方法。该方法接受一个阶段数组作为参数，并返回一个游标。然后，您可以使用游标迭代结果，或者使用 `toArray` 方法将结果获取为一个数组。
+
+```
+const documents = await collection.aggregate(aggregationPipelines).toArray();
+```
+
+现在，您已经了解了为应用程序添加全文搜索功能所需的一切。
+
+## 将搜索添加到图书馆应用程序
+
+打开 `server/src/controllers/books.ts` 文件中的代码。在其中，查找 `searchBooks` 函数。
+
+现在，它使用正则表达式查询数据库。
+
+``` title='server/src/controllers/books.ts'
+public async searchBooks(query: string): Promise<Book[]> {
+  const books = await collections?.books?.find({ title: {$regex: new RegExp(query, "i")} }).toArray();
+  return books;
+}
+```
+虽然这段代码在某种程度上是有效的，但它并不是最优的。随着数据集的增长，这个查询的性能会下降，因为它将不得不扫描整个集合。您无法使用正则表达式查询索引。此外，该查询仅匹配标题，并且仅匹配确切的字符序列。
+
+将此代码更改为使用搜索索引。您需要在聚合管道中使用 `$search` 阶段。让您的搜索覆盖标题、作者姓名和类型数组。
+
+这段代码将放在 `server/src/controllers/books.ts` 文件中的 `searchBooks` 函数中。
+
+<details>
+<summary>点击这里查看答案</summary>
+<div>
+
+``` title='server/src/controllers/books.ts'
+public async searchBooks(query: string): Promise<Book[]> {
+  const aggregationPipeline = [
+      {
+          $search: {
+              index: 'fulltextsearch',
+              text: {
+                  query,
+                  path: ['title', 'authors.name', 'genres']
+              }
+          }
+      }
+  ];
+  const books = await collections?.books?.aggregate(aggregationPipeline).toArray() as Book[];
+  return books;
+}
+```
+</div>
+</details>
+
+在应用程序中尝试一下，看看您得到的结果。您应该会看到结果比之前更加相关。

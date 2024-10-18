@@ -1,0 +1,78 @@
+{
+  "version.label": {
+    "message": "当前版本",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Full Text Search": {
+    "message": "全文搜索",
+    "description": "The label for category Full Text Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Full Text Search.link.generated-index.description": {
+    "message": "在本节中，你将了解什么是全文搜索，以及为什么你应该使用它。",
+    "description": "The generated-index page description for category Full Text Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Start Searching": {
+    "message": "开始搜索",
+    "description": "The label for category Start Searching in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Start Searching.link.generated-index.description": {
+    "message": "在本节中，你将学习如何创建搜索索引，以及如何搜索你的第一本书。",
+    "description": "The generated-index page description for category Start Searching in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Aggregation pipelines": {
+    "message": "聚合管道",
+    "description": "The label for category Aggregation pipelines in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Aggregation pipelines.link.generated-index.description": {
+    "message": "在本节中，您将学习如何使用 MongoDB 的查询语言查询数据。",
+    "description": "The generated-index page description for category Aggregation pipelines in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Implementing Atlas Search": {
+    "message": "实现 Atlas 搜索",
+    "description": "The label for category Implementing Atlas Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Implementing Atlas Search.link.generated-index.description": {
+    "message": "在本节中，您将学习如何为应用程序添加全文搜索功能。",
+    "description": "The generated-index page description for category Implementing Atlas Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Search Operators": {
+    "message": "搜索操作符",
+    "description": "The label for category Search Operators in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Search Operators.link.generated-index.description": {
+    "message": "在本节中，您将了解不同的搜索操作符。",
+    "description": "The generated-index page description for category Search Operators in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Faceting": {
+    "message": "分面搜索",
+    "description": "The label for category Faceting in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Faceting.link.generated-index.description": {
+    "message": "在本节中，您将了解如何使用 MongoDB Atlas Search 进行分面搜索。",
+    "description": "The generated-index page description for category Faceting in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Vector Search": {
+    "message": "向量搜索",
+    "description": "The label for category Vector Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Vector Search.link.generated-index.description": {
+    "message": "在本节中，您将学习如何使用 Atlas Search 创建向量搜索索引。",
+    "description": "The generated-index page description for category Vector Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.🏡 Create Vectors": {
+    "message": "🏡 向量化数据",
+    "description": "The label for category 🏡 Create Vectors in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.🏡 Create Vectors.link.generated-index.description": {
+    "message": "这是一个家庭作业活动。如果您在家中自行完成，请执行此操作。在本部分中，您将学习如何从各种提供者创建嵌入。",
+    "description": "The generated-index page description for category 🏡 Create Vectors in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Hybrid Search": {
+    "message": "Hybrid Search",
+    "description": "The label for category Hybrid Search in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Hybrid Search.link.generated-index.description": {
+    "message": "In this section, you'll learn how to leverage a hybrid approach to search indexes with Atlas Vector Search and Atlas Search.",
+    "description": "The generated-index page description for category Hybrid Search in sidebar tutorialSidebar"
+  }
+}

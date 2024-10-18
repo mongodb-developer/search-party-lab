@@ -1,0 +1,8 @@
+{
+  "label": "全文搜索",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "在本节中，你将了解什么是全文搜索，以及为什么你应该使用它。"
+  }
+}

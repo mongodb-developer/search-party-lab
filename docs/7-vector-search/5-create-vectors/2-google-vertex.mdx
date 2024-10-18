@@ -1,20 +1,20 @@
 # Using Google Cloud Vertex AI
 
 :::info
-Take-home activity, do it if you are following at home, won't be covered during the hands-on Lab.
+Take-home activity! Do it if you are following along at home. It won't be covered during the hands-on lab.
 :::
 
-Google Cloud now offers a series of AI Platform services that are built on top of Vertex AI. These services are designed to help you build, deploy, and manage machine learning models.
+Google Cloud now offers a series of AI platform services that are built on top of Vertex AI. These services are designed to help you build, deploy, and manage machine learning models.
 
-To create embeddings, they offer a number of services to convert text, images, or both into embeddings. In our application, we will use the `multimodal` embedding model to search for books by a description of the cover image.
+To create embeddings, they offer several services to convert text, images, or both into embeddings. In our application, we will use the `multimodal` embedding model to search for books by a description of the cover image.
 
 ## Create a Google Cloud account
 
-The first step is to create a Google Cloud account. Use the following link to get started with some free credits.
+The first step is to create a Google Cloud account. Use the following link to get started with free credits.
 
 [Sign Up for a Google Cloud Account](https://cloud.google.com/free)
 
-## Create new project
+## Create a new project
 
 For the welcome screen, create a new project. You can name it whatever you like.
 
@@ -22,11 +22,11 @@ Make sure that you pick an active billing account.
 
 <Screenshot src="/img/screenshots/7-vector-search/5-create-vectors/4-google-vertex/1-create-project.png" url="https://cloud.google.com" />
 
-Once the fields are filled out, click the `Create` button.
+Once the fields are filled out, click the **Create** button.
 
 ## Open Cloud Shell
 
-Once your project is created, look for the `Activate Cloud Shell` button in the top right corner of the screen.
+Once your project is created, look for the **Activate Cloud Shell** button in the top right corner of the screen.
 
 <Screenshot src="/img/screenshots/7-vector-search/5-create-vectors/4-google-vertex/2-activate-cloud-shell.png" url="https://cloud.google.com" />
 
@@ -62,7 +62,7 @@ mv /tmp/tmp.n0HdRFDDv8/application_default_credentials.json ~/credentials.json
 
 ## Create embeddings for some text
 
-To create embeddings for some text, you will start by creating a `request.json` file. This file will contain the text that you want to convert into embeddings. Run the following command in the Cloud Shell to create this file.
+Start by creating a `request.json` file. This file will contain the text that you want to convert into embeddings. Run the following command in the Cloud Shell to create this file.
 
 ```bash
 echo '{
@@ -84,9 +84,9 @@ curl -X POST \
     "https://us-central1-aiplatform.googleapis.com/v1/projects/$PROJECT_ID/locations/us-central1/publishers/google/models/multimodalembedding@001:predict"
 ```
 
-Make sure to change the `$PROJECT_ID` variable to your project id.
+Make sure to change the `$PROJECT_ID` variable to your project ID.
 
-You will receive a response similar to
+You will receive a response similar to:
 
 ```json
 {
@@ -109,13 +109,13 @@ You will receive a response similar to
 }
 ```
 
-You will notice that the `textEmbeddings` fields contains an array of 1408 numbers. These are the embeddings for the text that you provided.
+You will notice that the `textEmbeddings` fields contain an array of 1408 numbers. These are the embeddings for the text that you provided.
 
 ## Create embeddings for the books
 
-To create the embeddings for the books in your collection, you should run this curl command for each book. This process is somewhat time consuming, so we've already created them for you.
+To create the embeddings for the books in your collection, run this curl command for each book. This process is somewhat time-consuming, so we've already created them for you.
 
-You can find the 1408 dimensions vector in `embeddings` field of the new books collection you imported.
+You can find the 1408 dimensions vector in the `embeddings` field of the new books collection you imported.
 
 Because we already have the vectors for the books, we can use them with Vector Search.
 
@@ -123,7 +123,7 @@ Because we already have the vectors for the books, we can use them with Vector S
 
 To query the data, Vector Search will need to calculate the distance between the query vector and the vectors of the documents in the collection.
 
-To do so, you will need to vectorize your query. You can use the same function to vectorize your query as well.
+To do so, you will need to vectorize your query. You can use the same function to vectorize your query, as well.
 
 In the library application, we've created a function that will vectorize your query for you. You can find it in the `server/embeddings/googleVertex.mjs` file.
 
@@ -171,7 +171,7 @@ In your `server/.env` file, you'll find a few variables that you can use to conf
 
 The first one is `EMBEDDINGS_SOURCE`. It tells the application where to get the embeddings from. You can set it to `googleVertex`.
 
-Then set the `EMBEDDING_KEY` to your `credentials.json` file.
+Then, set the `EMBEDDING_KEY` to your `credentials.json` file.
 
 Finally, set the `PROJECT_ID` and `PROJECT_LOCATION` to the values for your project.
 
@@ -183,4 +183,3 @@ PROJECT_LOCATION=us-central1
 ```
 
 Your application now has a `getTermEmbeddings` function that will return the embeddings for a given text. You can see the details of this file in the `server/src/embeddings/googleVertex.js` file.
-

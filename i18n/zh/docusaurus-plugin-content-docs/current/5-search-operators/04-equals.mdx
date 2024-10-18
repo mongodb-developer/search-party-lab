@@ -1,0 +1,20 @@
+# 📘 `equals` 操作符
+
+`equals` 操作符用于在字段中搜索特定值。它类似于 `match` 操作符，但操作将由 Lucene 执行，并且可以与其他操作符结合使用以优化结果。
+
+`equals` 操作符的语法如下。您可以在文档中找到更多解释。
+
+```
+{
+   $search: {
+      "index": <index name>, // 可选，默认为 "default"
+      "equals": {
+         "path": "<field-to-search>",
+         "value": <boolean-value>|<objectId>|<number>|<date>,
+         "score": <score-options>
+      }
+   }
+}
+```
+
+如果您只想查询在特定年份出版的书籍，这将非常有用。

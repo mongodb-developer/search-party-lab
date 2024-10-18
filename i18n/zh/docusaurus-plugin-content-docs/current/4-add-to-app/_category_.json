@@ -1,0 +1,8 @@
+{
+    "label": "实现 Atlas 搜索",
+    "position": 5,
+    "link": {
+        "type": "generated-index",
+        "description": "在本节中，您将学习如何为应用程序添加全文搜索功能。"
+    }
+}
