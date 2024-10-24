@@ -18,7 +18,11 @@ The first step of building the search index is selecting the configuration metho
 
 Next, you need to select a name and data source for your index. Change the name to **fulltextsearch** and select the database **library** and the collection **books**.
 
-<Screenshot alt="The 'Name & Data Source' step of creating a new search index" src="img/screenshots/2-search/2-search-index/4-search-index-config-name-datasource.png" url="https://cloud.mongodb.com" />
+<Screenshot
+  alt="The 'Name & Data Source' step of creating a new search index"
+  src="img/screenshots/2-search/2-search-index/4-search-index-config-name-datasource.png"
+  url="https://cloud.mongodb.com"
+/>
 
 The final step allows you to review the index configuration and refine it if needed. You may also see the JSON that was generated from your configuration by clicking **View JSON**.
 
@@ -31,7 +35,7 @@ The final step allows you to review the index configuration and refine it if nee
     ```
 
 :::info
-The index is using dynamic field mappings. We didn't configure any explicit (static) mappings between the fields in the documents and the search index. That's why Atlas created dynamic mappings that match the data in the documents to some common field types such as `double`, `string`, `array`, `int`, and `double`.
+The index is using dynamic field mappings. We didn't configure any explicit (static) mappings between the fields in the documents and the search index. That's why Atlas created dynamic mappings that match the data in the documents to some common field types such as `string`, `array`, `int`, and `double`.
 Dynamic mappings are useful when you're just getting started with Atlas Search or if your schema changes regularly. However, they take up more space compared to static mappings.
 :::
 
@@ -48,4 +52,3 @@ When your search index's status changes to `Ready`, you'll be able to see more i
 <Screenshot alt="The 'Search Indexes' page with the newly created index highlighted" src="img/screenshots/2-search/2-search-index/6-search-indexes-list.png" url="https://cloud.mongodb.com" />
 
 Once your new index's status is `Ready`, you can move to the next step.
-

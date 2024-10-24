@@ -4,7 +4,7 @@ Atlas Search uses inverted indexes to support text search queries. An inverted i
 
 ## Simple string search
 
-When you do a simple query in your database using a LIKE operator, or a regular expression, the database has to scan every document in the collection to find the matching documents. This is a slow process, and it gets slower as the number of documents in the collection increases.
+When you do a simple query in your database using a LIKE operator, or a regular expression, the database has to scan every document in the collection, or record in the Index, to find the matching documents. This is a slow process, and it gets slower as the number of documents in the collection increases.
 
 ![Simple String Search](/img/1-full-text-search/3-string-search.gif)
 
