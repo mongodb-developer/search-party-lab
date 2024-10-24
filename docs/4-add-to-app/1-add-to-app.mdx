@@ -26,7 +26,8 @@ public async searchBooks(query: string): Promise<Book[]> {
   return books;
 }
 ```
-While this code works to a certain extent, it is less than optimal. As the dataset grows, the performance of this query will degrade because it will have to scan the entire collection. You cannot query the index with a regular expression. Furthermore, the query only matches on the title and only for the exact sequence of characters.
+
+While this code works to a certain extent, it is less than optimal. As the dataset grows, the performance of this query will degrade because it will have to scan the entire Index. If you query the index with a regular expression, it will need to scan each entry. Furthermore, the query only matches on the title and only for the exact sequence of characters.
 
 Change this code to use the search index instead. You will need to use the `$search` stage in the aggregation pipeline. Have your search cover the title, the author name, and the genres array.
 
@@ -53,6 +54,7 @@ public async searchBooks(query: string): Promise<Book[]> {
   return books;
 }
 ```
+
 </div>
 </details>
 
