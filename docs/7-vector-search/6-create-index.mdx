@@ -1,5 +1,6 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Screenshot from "../../src/components/Screenshot";
 
 # 👐 Create Vector Search Indexes
 
@@ -15,11 +16,12 @@ Click the **Create Search Index** button.
 
 <Screenshot src="img/screenshots/7-vector-search/6-create-index/2-create-search-index.png" alt="The 'Create Index' page with the 'Create Search Index' button highlighted" url="https://cloud.mongodb.com" />
 
-This time, you will use the **JSON Editor** to create your index
+In the following screen select **Vector Search**, change the index name to `vectorsearch`, and select your database and the `books` collection.
+This time, you will use the **JSON Editor** to create your index, select that option and click **Next**
 
 <Screenshot src="img/screenshots/7-vector-search/6-create-index/3-json-editor.png" alt="The 'Create Index' page with the 'JSON Editor' tab highlighted" url="https://cloud.mongodb.com" />
 
-Select your database and the `books` collection, change the index name to `vectorsearch`, and add the following code in the JSON editor:
+Add the following code in the JSON editor:
 
 <Tabs groupId="aiproviders">
   <TabItem value="serverless" label="Serverless Endpoint" default>
@@ -72,4 +74,4 @@ Select your database and the `books` collection, change the index name to `vecto
   </TabItem>
 </Tabs>
 
-The final step allows you to review the index configuration and refine it, if needed. Go ahead and click **Create Search Index**.
+The final step allows you to review the index configuration and refine it, if needed. Go ahead and click **Create Vector Search Index**.
