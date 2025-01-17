@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunksearch_party_lab=self.webpackChunksearch_party_lab||[]).push([[2572],{2572:(a,e,s)=>{s.r(e)}}]);
