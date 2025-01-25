@@ -1,0 +1,178 @@
+# 🦸‍♂️ Testing the Hybrid Search
+
+:::info
+Extra activity, do it if you have extra time or are following at home, won't be covered during the hands-on Lab.
+:::
+
+Here's the complete code snippet to implement a hybrid search against the books collection.
+
+<details>
+<summary>See complete code</summary>
+<div>
+```javascript
+    //...
+    private computeWeightedRRF(books: Book[], weight: number): void{
+        const RANK_CONSTANT = 60;
+        books.forEach((book,i)=>{
+            book['score'] = weight*1/(i+RANK_CONSTANT)
+            return book;
+        })
+    }
+
+    public async fullTextSearch(query: string,limit: number): Promise<Book[]>{
+        const pipeline = [
+            {
+              $search: {
+                index: "fulltextsearch",
+                compound: {
+                  should: [
+                    {
+                      text: {
+                        query,
+                        path: "title",
+                        score: { boost: { value: 3 } }
+                      }
+                    },
+                    {
+                        text: {
+                          query,
+                          path: "synopsis",
+                          score: { boost: { value: 2 } }
+                        }
+                    },
+                    {
+                      text: {
+                        query,
+                        path: "authors.name",
+                        score: { boost: { value: 2 } }
+                      }
+                    }
+                  ]
+                }
+              }
+            },{
+              $limit: limit
+            },{
+              $project:{ //project only relevant fields
+                title: 1, authors: 1, synopsis:1, cover:1
+              }
+            }
+          ]
+        const books = await collections?.books?.aggregate(pipeline).toArray() as Book[];
+        return books;
+    }
+
+    public async vectorSearch(query: string, limit: number): Promise<Book[]>{
+        const vector = await getEmbeddings(query);
+        const pipeline = [
+            {
+                $vectorSearch: {
+                  queryVector:  vector,
+                  path: 'embeddings',
+                  numCandidates: 100,
+                  index: 'vectorsearch',
+                  limit: limit,
+                }
+            },{
+                $project:{ //project only relevant fields
+                  title: 1, authors: 1, synopsis:1, cover:1
+                }
+            }
+          ]
+        const books = await collections?.books?.aggregate(pipeline).toArray() as Book[];
+        return books;
+    }
+
+    public async searchBooks(query: string): Promise<Book[]> {
+        const VECTOR_WEIGHT = 0.4;
+        const FULL_TEXT_WEIGHT = 0.6;
+        const SEARCH_LIMIT = 5
+
+        //run full text search and vector search separately
+        const [fts_results,vs_results] = await Promise.all([
+            this.fullTextSearch(query, SEARCH_LIMIT),
+            this.vectorSearch(query, SEARCH_LIMIT)
+        ])
+
+        //compute weighted Reciprocal Rank Fusion on both results
+        this.computeWeightedRRF(fts_results, FULL_TEXT_WEIGHT)
+        this.computeWeightedRRF(vs_results, VECTOR_WEIGHT)
+
+        //aggregate both arrays to a single map using _id as a key
+        const documentMap = [...fts_results,...vs_results].reduce((map,book:any)=>{
+            if(map.hasOwnProperty(book._id)){
+                map[book._id].score += book.score;
+            }else{
+                map[book._id] = book;
+            }
+            return map;
+        },{})
+
+        //transform map back to an array
+        const books = Object.keys(documentMap).map(k=>documentMap[k]);
+
+        //return books with the highest scores
+        const topBooks = books.sort((a,b)=>b.score-a.score).slice(0,SEARCH_LIMIT);
+        return topBooks;
+      }
+    //...
+```
+</div>
+</details>
+
+You can observe the effect of hybrid search on the search results by tuning the **VECTOR_WEIGHT** and **FULL_TEXT_WEIGHT**.
+Lets use the search term ***basketball*** and compare the results. Note that your results may look different as we may periodically make changes to the dataaset.
+
+Lets start with setting `VECTOR_WEIGHT=0` and `FULL_TEXT_WEIGHT=1` i.e. the results will be based on 100% full-text search.
+
+<details>
+<summary>Here are the top 5 titles:</summary>
+<div>
+1. The New York Knicks Basketball Team (Great Sports Teams)
+2. In the Land of Giants: My Life in Basketball
+3. Venus to the Hoop: A Gold Medal Year in Women's Basketball
+4. Night Hoops
+5. Cat (Fear Street Series #45)
+</div>
+</details>
+
+Now, lets set `VECTOR_WEIGHT=1` and `FULL_TEXT_WEIGHT=0` i.e. the results will be based on 100% vector search.
+
+<details>
+<summary>Here are the top 5 titles:</summary>
+<div>
+1. NBA: The Official Fan's Guide
+2. In the Land of Giants: My Life in Basketball
+3. Night Hoops
+4. Venus to the Hoop: A Gold Medal Year in Women's Basketball
+5. The Big Three
+</div>
+</details>
+
+Finally, lets set `VECTOR_WEIGHT=0.5` and `FULL_TEXT_WEIGHT=0.5` i.e. we are placing equal empahasis on full-text search and vector search.
+
+<details>
+<summary>Here are the top 5 titles:</summary>
+<div>
+1. In the Land of Giants: My Life in Basketball
+2. Venus to the Hoop: A Gold Medal Year in Women's Basketball
+3. Night Hoops
+4. The New York Knicks Basketball Team (Great Sports Teams)
+5. NBA: The Official Fan's Guide
+</div>
+</details>
+
+**Key observations:**
+1. From the full-text search result, **Cat (Fear Street Series #45)** can be seen as a false positive because it may have little to do with basketball but it is only there because the synopsis contains the word **basketball**.
+2. From the vector search result, **The Big Three** made it to the top 5 because it showed a few basketball players on its cover image, but this title was missed in the full-text search because neither the title nor the synopsis contains the word **basketball**.
+3. From the hybrid search result, titles that made it to both types of search were ranked higher
+
+
+
+
+
+
+
+
+
+
