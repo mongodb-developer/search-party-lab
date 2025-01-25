@@ -40,7 +40,7 @@ public async searchBooks(query: string): Promise<Book[]> {
         path: 'embeddings',
         numCandidates: 100,
         index: 'vectorsearch',
-        limit: 100,
+        limit: 10,
       }
     }
   ];

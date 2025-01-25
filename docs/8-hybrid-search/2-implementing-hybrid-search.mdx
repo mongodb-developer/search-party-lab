@@ -1,64 +1,197 @@
-# 📘 Building the Hybrid Search Pipeline
+# 🦸‍♂️ Implementing Hybrid Search
 
-In this section, we'll construct a hybrid search pipeline that combines the power of vector search for semantic similarity with the precision of full-text search. We'll use MongoDB's aggregation framework to create this pipeline.
+:::info
+Extra activity, do it if you have extra time or are following at home, won't be covered during the hands-on Lab.
+:::
 
-## 3.1 Vector Search Stage
+In this section, we'll explore how we can implement Hybrid Search using [Reciprocal Rank Fusion](https://www.mongodb.com/docs/atlas/atlas-vector-search/tutorials/reciprocal-rank-fusion/#what-is-reciprocal-rank-fusion-), a common technique used to combine results from different search methods.
 
-The first stage of our pipeline will be the vector search. This allows us to find books with synopses that are semantically similar to our query.
+The MongoDB documentation shows how you can implement the [Hybrid Search using a single aggregation pipeline](https://www.mongodb.com/docs/atlas/atlas-vector-search/tutorials/reciprocal-rank-fusion/#procedure-1). However, in this lab, we will combine the results from vector search and full-text search with application logic instead. 
 
-```javascript
+## Prerequites
+This segment depends on the setup you have done in previous exercises:
+1. Ensure you have [created an Atlas Search index](https://mongodb-developer.github.io/search-lab/docs/search/search-index) on the **books** collection with **dynamic mappings**.
+2. Ensure you have [imported the embeddings](https://mongodb-developer.github.io/search-lab/docs/vector-search/import-data). 
+3. Ensure you have [created the vector search index](https://mongodb-developer.github.io/search-lab/docs/vector-search/create-index) on the **embeddings** field.
 
-{
-  $vectorSearch: {
-    index: "books_synopsis_vector",
-    path: "embeddings",
-    queryVector: [0.1, -0.2, 0.3, ...], // Your query vector here
-    numCandidates: 100,
-    limit: 20
-  }
-}
-```
+## Function for Full-Text Search
 
-Let's break this down:
+Write a new function called `fullTextSearch` in `books.ts`: 
+- It accepts ***query*** as an argument of **string** type, and ***limit*** as an argument of **number** type
+- Using ***query***, it should perform a full-text search on **title**, **synopsis**, and **author names**, and you may boost scores at your own discretion
+- It should limit the number of books returned using the **limit** argument parsed
+- Using `$project` to only return the following book properties: ***_id***, ***title***, ***authors***, ***synopsis***, and ***cover***
 
-- `index`: The name of your vector index.
-- `path`: The field containing your embeddings.
-- `queryVector`: The vector representation of your search query.
-- `numCandidates`: The number of initial candidates to consider.
-- `limit`: The maximum number of results to return from this stage.
+<details>
+<summary>Answer</summary>
+<div>
 
-## 3.2 Text Search Stage
-
-Next, we'll add a text search stage to find books based on title and author matches.
-
-```javascript
-{
-  $search: {
-    index: "books_text_index",
-    compound: {
-      should: [
-        {
-          text: {
-            query: "your search query",
-            path: "title",
-            score: { boost: { value: 3 } }
-          }
-        },
-        {
-          text: {
-            query: "your search query",
-            path: "authors.name",
-            score: { boost: { value: 2 } }
-          }
-        }
-      ]
+```js
+    public async fullTextSearch(query: string,limit: number): Promise<Book[]>{
+        const pipeline = [
+            {
+              $search: {
+                index: "fulltextsearch",
+                compound: {
+                  should: [
+                    {
+                      text: {
+                        query,
+                        path: "title",
+                        score: { boost: { value: 3 } }
+                      }
+                    },
+                    {
+                        text: {
+                          query,
+                          path: "synopsis",
+                          score: { boost: { value: 2 } }
+                        }
+                    },
+                    {
+                      text: {
+                        query,
+                        path: "authors.name",
+                        score: { boost: { value: 2 } }
+                      }
+                    }
+                  ]
+                }
+              }
+            },{
+              $limit: limit
+            },{
+              $project:{ //project only relevant fields
+                title: 1, authors: 1, synopsis:1, cover:1
+              }
+            }
+          ]
+        const books = await collections?.books?.aggregate(pipeline).toArray() as Book[];
+        return books;
     }
-  }
-}
+
 ```
+</div>
+</details>
 
-## Key points:
+## Function for Vector Search
 
-- We're using a compound query with "should" clauses.
-- We search in both `title` and `authors.name` fields.
-- The `boost` values (3 for title, 2 for author) give more weight to title matches.
+Write a new function called `vectorSearch` in `books.ts`: 
+- It accepts ***query*** as an argument of **string** type, and ***limit*** as an argument of **number** type
+- It should vectorize the ***query*** and use resulting vector to perform a vector search on **books** collection.
+- It should limit the number of books returned using the **limit** argument parsed
+- Using `$project` to only return the following book properties: ***_id***, ***title***, ***authors***, ***synopsis***, and ***cover***
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+    public async vectorSearch(query: string, limit: number): Promise<Book[]>{
+        const vector = await getEmbeddings(query);
+        const pipeline = [
+            {
+                $vectorSearch: {
+                  queryVector:  vector,
+                  path: 'embeddings',
+                  numCandidates: 100,
+                  index: 'vectorsearch',
+                  limit: limit,
+                }
+            },{
+                $project:{ //project only relevant fields
+                  title: 1, authors: 1, synopsis:1, cover:1
+                }
+            }
+          ]
+        const books = await collections?.books?.aggregate(pipeline).toArray() as Book[];
+        return books;
+    }
+
+```
+</div>
+</details>
+
+
+## Function to compute Weighted [Reciprocal Rank Fusion](https://www.mongodb.com/docs/atlas/atlas-vector-search/tutorials/reciprocal-rank-fusion/#what-is-reciprocal-rank-fusion-)
+
+Atlas full-text search and vector search, by default, returns documents sorted by their relevancy score from highest to lowest i.e. they are ranked by default.
+
+A reciprocal rank score is given by `1 / (RANK * RANK_CONSTANT)`. A **RANK_CONSTANT** (typically about 60), prevents the case of `1/0` where **RANK** is 0, and smoothens the scores so that it is not too heavily skewed towards higher ranked documents.
+
+You may give different weightage to full-text search versus vector search by multiplying the scores with a different weight.
+
+Write a new private function called `computeWeightedRRF` in `books.ts`: 
+
+- It accepts ***books*** as an argument of **Book[]** type, and ***weight*** as an argument of **number** type
+- It should compute the Reciprocal Rank score based on its position in the array (the first book in the array should be ranked 0).
+- Mulitply the score further by the given ***weight*** and store the resultant score as `score` back into the book object.
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+    private computeWeightedRRF(books: Book[], weight: number): void{
+        const RANK_CONSTANT = 60;
+        books.forEach((book,i)=>{
+            book['score'] = weight*1/(i+RANK_CONSTANT)
+            return book;
+        })
+    }
+```
+</div>
+</details>
+
+## Function to perform Hybrid Search
+The final thing we need to do is to combine the scores by summing the scores from both types of searches. 
+If the same book is found in two searches, the score should be summed up giving it a higher score.
+
+Replace the `searchBooks` function in `books.ts`:
+- It accepts ***query*** as an argument of **string** type
+- It should execute both full-text search and vector search based on the ***query***
+- It should parse both results into the `computeWeightedRRF`. Lets give full-text search a weight of **0.5** and vector search a weight of **0.5**.
+- Sum the two scores from both sets of results, re-rank the books based on the new scores and return the **top 5** books
+
+<details>
+<summary>Answer</summary>
+<div>
+
+```js
+    public async searchBooks(query: string): Promise<Book[]> {
+        const VECTOR_WEIGHT = 0.5;
+        const FULL_TEXT_WEIGHT = 0.5;
+        const SEARCH_LIMIT = 5
+
+        //run full text search and vector search separately
+        const [fts_results,vs_results] = await Promise.all([
+            this.fullTextSearch(query, SEARCH_LIMIT),
+            this.vectorSearch(query, SEARCH_LIMIT)
+        ])
+
+        //compute weighted Reciprocal Rank Fusion on both results
+        this.computeWeightedRRF(fts_results, FULL_TEXT_WEIGHT)
+        this.computeWeightedRRF(vs_results, VECTOR_WEIGHT)
+
+        //aggregate both arrays to a single map using _id as a key
+        const documentMap = [...fts_results,...vs_results].reduce((map,book:any)=>{
+            if(map.hasOwnProperty(book._id)){
+                map[book._id].score += book.score;
+            }else{
+                map[book._id] = book;
+            }
+            return map;
+        },{})
+
+        //transform map back to an array
+        const books = Object.keys(documentMap).map(k=>documentMap[k]);
+
+        //return books with the highest scores
+        const topBooks = books.sort((a,b)=>b.score-a.score).slice(0,SEARCH_LIMIT);
+        return topBooks;
+      }
+```
+</div>
+</details>
+
+

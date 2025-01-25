@@ -23,22 +23,13 @@ Hybrid search offers several advantages over using either vector or full-text se
 
 In our library application, hybrid search will allow us to:
 
-1. Find books based on the semantic similarity of their synopses to a given query.
-2. Match books by title, author, or other metadata fields.
+1. Find books based on their cover images.
+2. Match books by title, author, synopsis or other metadata fields.
 3. Combine these approaches to rank results in a way that considers both content similarity and metadata relevance.
 
 For example, a search for "space exploration" could return:
 
+- Books with covers that constains stars, planets, satellites etc. 
 - Books directly about space exploration (matched by title or synopsis)
 - Science fiction novels set in space (matched semantically)
 - Biographies of astronauts (matched by related concepts)
-
-## How It Works
-
-Our hybrid search implementation will:
-
-1. Use vector search on book synopsis embeddings to find semantically similar content.
-2. Employ full-text search on titles, author names, and other relevant fields.
-3. Combine the scores from both methods to create a final relevance ranking.
-
-This approach ensures that our library catalog search is both powerful and intuitive, helping users discover books that best match their interests, even if they're not sure of the exact titles or authors they're looking for.
